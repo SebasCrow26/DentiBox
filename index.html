@@ -1,328 +1,926 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>DentiBox</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DentiBox | Insumos Odontológicos</title>
+<meta name="description" content="DentiBox - Tu proveedor de insumos odontológicos. Pedidos por WhatsApp, envíos rápidos y productos originales para tu consultorio."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Inter',sans-serif;background:#F5F7FA;color:#1a2340;}
+:root{
+  --navy:#2D2E8F;--navy-dark:#1e1f6b;--navy-light:#3d3fa8;
+  --sky:#29ABE2;--sky-light:#4ec0ed;--sky-dark:#1a8bbf;
+  --white:#ffffff;--bg:#F4F7FB;--bg2:#EEF2F8;
+  --card:#ffffff;--border:#E2E8F0;--border2:#CBD5E1;
+  --text:#0F172A;--muted:#64748B;--muted2:#94A3B8;
+  --green:#25D366;--green2:#1ebe5b;
+  --danger:#EF4444;--warning:#F59E0B;--success:#10B981;
+  --shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 16px rgba(45,46,143,0.06);
+  --shadow-lg:0 8px 32px rgba(45,46,143,0.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;}
 
-/* NAV */
-nav{background:#fff;border-bottom:1.5px solid #E2E8F0;position:sticky;top:0;z-index:100;padding:0 2rem;}
-.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;}
-.logo-wrap{display:flex;align-items:center;gap:10px;}
-.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,#29ABE2,#2D2E8F);border-radius:10px;display:flex;align-items:center;justify-content:center;}
-.logo-icon i{color:#fff;font-size:20px;}
-.logo-text{font-size:1.35rem;font-weight:700;color:#2D2E8F;letter-spacing:-0.5px;}
-.logo-sub{font-size:0.72rem;color:#29ABE2;font-weight:500;letter-spacing:0.5px;display:block;margin-top:-3px;}
-.nav-right{display:flex;align-items:center;gap:1rem;}
-.cart-btn{background:#2D2E8F;color:#fff;border:none;border-radius:10px;padding:8px 18px;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s;}
-.cart-btn:hover{background:#1e1f6b;}
-.cart-badge{background:#29ABE2;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;}
+/* ═══ TOAST ═══ */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--navy);color:#fff;border-radius:10px;padding:11px 22px;font-size:0.85rem;font-weight:600;z-index:9999;opacity:0;transition:all 0.32s cubic-bezier(.4,0,.2,1);pointer-events:none;white-space:nowrap;box-shadow:var(--shadow-lg);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.success{background:var(--success);}
+.toast.error{background:var(--danger);}
+.toast.warning{background:var(--warning);color:#111;}
 
-/* HERO */
-.hero{background:linear-gradient(135deg,#2D2E8F 0%,#1a1b5e 60%,#0d1033 100%);color:#fff;padding:3.5rem 2rem 3rem;}
-.hero-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:2rem;}
-.hero-text h1{font-size:2.1rem;font-weight:700;line-height:1.2;margin-bottom:0.8rem;}
-.hero-text h1 span{color:#29ABE2;}
-.hero-text p{font-size:1rem;color:rgba(255,255,255,0.75);max-width:440px;line-height:1.6;}
-.hero-badges{display:flex;gap:10px;margin-top:1.5rem;flex-wrap:wrap;}
-.badge{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:6px 14px;font-size:0.8rem;display:flex;align-items:center;gap:6px;}
-.badge i{color:#29ABE2;font-size:15px;}
-.hero-img{width:180px;height:180px;background:rgba(41,171,226,0.15);border-radius:24px;border:2px solid rgba(41,171,226,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.hero-img i{font-size:80px;color:#29ABE2;}
+/* ═══ NAV ═══ */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:68px;background:rgba(255,255,255,0.97);backdrop-filter:blur(12px);border-bottom:1.5px solid var(--border);display:flex;align-items:center;padding:0 5%;}
+.nav-inner{width:100%;max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;}
+.nav-logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--sky),var(--navy));border-radius:11px;display:flex;align-items:center;justify-content:center;}
+.nav-logo-icon i{color:#fff;font-size:22px;}
+.nav-logo-texts .brand{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:800;color:var(--navy);letter-spacing:-0.5px;display:block;line-height:1.1;}
+.nav-logo-texts .tagline{font-size:0.65rem;color:var(--sky);font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+.nav-links{display:flex;gap:0;list-style:none;align-items:center;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.84rem;font-weight:600;letter-spacing:0.3px;padding:6px 14px;border-radius:8px;transition:all 0.2s;cursor:pointer;display:block;}
+.nav-links a:hover,.nav-links a.active{color:var(--navy);background:rgba(45,46,143,0.07);}
+.nav-right{display:flex;align-items:center;gap:8px;}
+.nav-cart-btn{position:relative;background:var(--navy);color:#fff;border:none;padding:9px 18px;border-radius:10px;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s;}
+.nav-cart-btn:hover{background:var(--navy-dark);}
+.nav-cart-text{display:inline;}
+.cart-count{background:var(--sky);color:#fff;font-size:0.65rem;font-weight:700;width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;min-width:19px;transition:transform 0.2s;}
+.cart-count.pop{animation:cartPop 0.3s ease;}
+@keyframes cartPop{0%{transform:scale(1);}50%{transform:scale(1.5);}100%{transform:scale(1);}}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;}
+.hamburger span{width:24px;height:2px;background:var(--navy);border-radius:2px;display:block;transition:all 0.3s;}
+.mobile-menu{display:none;position:fixed;top:68px;left:0;right:0;background:rgba(255,255,255,0.98);backdrop-filter:blur(12px);border-bottom:1.5px solid var(--border);z-index:999;padding:16px 5%;flex-direction:column;gap:2px;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{color:var(--muted);text-decoration:none;font-size:0.95rem;font-weight:600;padding:11px 14px;border-radius:9px;cursor:pointer;transition:all 0.2s;}
+.mobile-menu a:hover{color:var(--navy);background:rgba(45,46,143,0.07);}
 
-/* SEARCH & FILTER */
-.toolbar{max-width:1100px;margin:2rem auto 0;padding:0 2rem;}
-.toolbar-inner{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+/* ═══ PAGES ═══ */
+.page{display:none;padding-top:68px;}
+.page.active{display:block;}
+
+/* ═══ HERO ═══ */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#1a1b6e 55%,#0d0e3d 100%);color:#fff;padding:5rem 5% 4rem;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 80% 50%,rgba(41,171,226,0.18) 0%,transparent 60%);pointer-events:none;}
+.hero-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:3rem;position:relative;z-index:1;}
+.hero-text{flex:1;min-width:0;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(41,171,226,0.2);border:1px solid rgba(41,171,226,0.4);color:rgba(255,255,255,0.9);font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:7px 16px;border-radius:50px;margin-bottom:1.4rem;}
+.hero-eyebrow i{color:var(--sky);font-size:14px;}
+.hero-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:1rem;}
+.hero-title .hl{color:var(--sky);}
+.hero-desc{font-size:1rem;color:rgba(255,255,255,0.75);line-height:1.7;max-width:500px;margin-bottom:2rem;font-weight:300;}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:2.5rem;}
+.btn-primary{background:var(--sky);color:#fff;padding:13px 28px;border-radius:10px;font-weight:700;font-size:0.9rem;border:none;cursor:pointer;transition:all 0.2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+.btn-primary:hover{background:var(--sky-dark);transform:translateY(-1px);}
+.btn-outline-white{background:transparent;color:#fff;padding:12px 24px;border-radius:10px;font-weight:600;font-size:0.9rem;border:1.5px solid rgba(255,255,255,0.35);cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-outline-white:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.6);}
+.hero-badges{display:flex;gap:10px;flex-wrap:wrap;}
+.hbadge{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:7px 13px;font-size:0.78rem;font-weight:500;}
+.hbadge i{color:var(--sky);font-size:15px;}
+.hero-visual{flex:0 0 320px;display:flex;align-items:center;justify-content:center;}
+.hero-card-demo{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:2rem;text-align:center;backdrop-filter:blur(10px);}
+.hero-card-demo i{font-size:72px;color:var(--sky);display:block;margin-bottom:1rem;}
+.hero-card-demo .hcd-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:.4rem;}
+.hero-card-demo .hcd-sub{font-size:0.8rem;color:rgba(255,255,255,0.6);}
+.hero-brands{margin-top:.8rem;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+.hbrand{background:rgba(255,255,255,0.12);border-radius:6px;padding:4px 10px;font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.8);}
+
+/* ═══ FEATURES ═══ */
+.features{background:#fff;padding:4rem 5%;border-bottom:1.5px solid var(--border);}
+.features-inner{max-width:1200px;margin:0 auto;}
+.section-header{text-align:center;margin-bottom:3rem;}
+.section-header h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;color:var(--navy);margin-bottom:.5rem;}
+.section-header p{color:var(--muted);font-size:.95rem;}
+.accent-bar{width:44px;height:4px;background:var(--sky);border-radius:4px;margin:.8rem auto 0;}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;}
+.feat-card{background:var(--bg);border:1.5px solid var(--border);border-radius:14px;padding:1.8rem 1.5rem;transition:all 0.25s;}
+.feat-card:hover{border-color:var(--sky);transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.feat-icon{width:48px;height:48px;background:linear-gradient(135deg,rgba(41,171,226,0.15),rgba(45,46,143,0.12));border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;}
+.feat-icon i{font-size:24px;color:var(--navy);}
+.feat-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.5rem;}
+.feat-card p{color:var(--muted);font-size:.85rem;line-height:1.6;}
+
+/* ═══ STEPS ═══ */
+.steps{padding:4rem 5%;background:var(--bg);}
+.steps-inner{max-width:900px;margin:0 auto;}
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0;position:relative;}
+.steps-grid::before{content:'';position:absolute;top:28px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,var(--sky),var(--navy));border-radius:2px;z-index:0;}
+.step{text-align:center;padding:1.5rem 1.2rem;position:relative;z-index:1;}
+.step-num{width:56px;height:56px;border-radius:50%;background:var(--navy);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:1.4rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:0 0 0 6px var(--bg),0 0 0 8px var(--sky);}
+.step h4{font-weight:700;font-size:.92rem;color:var(--navy);margin-bottom:.4rem;}
+.step p{color:var(--muted);font-size:.8rem;line-height:1.55;}
+
+/* ═══ TESTIMONIOS ═══ */
+.testimonials{background:#fff;padding:4rem 5%;border-top:1.5px solid var(--border);}
+.testimonials-inner{max-width:860px;margin:0 auto;}
+.t-carousel-outer{position:relative;overflow:hidden;mask-image:linear-gradient(to right,transparent,black 12%,black 88%,transparent);}
+.t-track{display:flex;transition:transform 0.55s cubic-bezier(.4,0,.2,1);}
+.t-card{flex:0 0 100%;background:var(--bg);border:1.5px solid var(--border);border-radius:16px;padding:2rem 2.2rem;position:relative;}
+.t-card::before{content:'\201C';color:var(--sky);font-size:5rem;font-family:Georgia,serif;line-height:0.4;position:absolute;top:22px;left:24px;opacity:0.5;}
+.t-card blockquote{font-size:.97rem;line-height:1.8;color:var(--text);font-style:italic;font-weight:300;padding-top:.5rem;}
+.t-author{margin-top:1rem;color:var(--muted);font-size:.78rem;font-weight:600;letter-spacing:.5px;}
+.t-stars{color:var(--warning);font-size:.95rem;margin-top:.3rem;}
+.t-dots{display:flex;justify-content:center;gap:8px;margin-top:1.4rem;}
+.t-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);border:none;cursor:pointer;padding:0;transition:all 0.2s;}
+.t-dot.active{background:var(--navy);transform:scale(1.3);}
+
+/* ═══ CATALOG / TIENDA ═══ */
+.tienda-hero{background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;padding:3rem 5% 2.5rem;}
+.tienda-hero-inner{max-width:1200px;margin:0 auto;}
+.tienda-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:2rem;font-weight:800;margin-bottom:.4rem;}
+.tienda-hero p{color:rgba(255,255,255,0.7);font-size:.92rem;}
+.catalog-wrap{max-width:1200px;margin:0 auto;padding:2rem 5% 4rem;}
+.catalog-toolbar{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin-bottom:1.5rem;background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:1rem 1.2rem;}
 .search-wrap{flex:1;min-width:220px;position:relative;}
-.search-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#8898b0;font-size:18px;}
-.search-wrap input{width:100%;padding:10px 14px 10px 38px;border:1.5px solid #E2E8F0;border-radius:10px;font-size:0.95rem;font-family:inherit;background:#fff;outline:none;transition:border 0.2s;}
-.search-wrap input:focus{border-color:#29ABE2;}
-.filter-btns{display:flex;gap:8px;flex-wrap:wrap;}
-.filter-btn{background:#fff;border:1.5px solid #E2E8F0;border-radius:8px;padding:8px 16px;font-size:0.85rem;font-family:inherit;cursor:pointer;color:#4a5568;font-weight:500;transition:all 0.2s;}
-.filter-btn.active,.filter-btn:hover{background:#2D2E8F;color:#fff;border-color:#2D2E8F;}
+.search-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted2);font-size:18px;}
+.search-wrap input{width:100%;padding:10px 14px 10px 38px;border:1.5px solid var(--border);border-radius:10px;font-size:.9rem;font-family:'Inter',sans-serif;background:var(--bg);outline:none;transition:border 0.2s;color:var(--text);}
+.search-wrap input:focus{border-color:var(--sky);}
+.filter-btns{display:flex;gap:6px;flex-wrap:wrap;}
+.filter-btn{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:8px 14px;font-size:.82rem;font-family:'Inter',sans-serif;cursor:pointer;color:var(--muted);font-weight:500;transition:all 0.2s;white-space:nowrap;}
+.filter-btn.active,.filter-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+.filter-select{display:none;width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Inter',sans-serif;font-size:.9rem;background:var(--bg);color:var(--text);outline:none;}
+.result-label{font-size:.88rem;color:var(--muted);margin-bottom:1rem;font-weight:500;}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.2rem;}
+.prod-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all 0.25s;position:relative;}
+.prod-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);border-color:var(--sky);}
+.prod-badge{position:absolute;top:10px;left:10px;background:var(--navy);color:#fff;font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:6px;letter-spacing:.5px;z-index:2;}
+.prod-badge.oferta{background:var(--danger);}
+.prod-badge.nuevo{background:var(--success);}
+.prod-img{background:linear-gradient(135deg,#EEF2FF,#E0F4FF);height:150px;display:flex;align-items:center;justify-content:center;}
+.prod-img i{font-size:60px;color:var(--navy);opacity:.8;}
+.prod-body{padding:14px;}
+.prod-cat-tag{font-size:.7rem;color:var(--sky);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.prod-body h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:.92rem;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.3;}
+.prod-desc{font-size:.78rem;color:var(--muted);margin-bottom:10px;line-height:1.4;}
+.prod-footer{display:flex;align-items:center;justify-content:space-between;}
+.prod-price{display:flex;flex-direction:column;}
+.prod-price .old{font-size:.75rem;color:var(--muted2);text-decoration:line-through;line-height:1;}
+.prod-price .current{font-size:1.05rem;font-weight:700;color:var(--navy);}
+.add-btn{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:8px 13px;font-size:.8rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background 0.2s;font-family:'Inter',sans-serif;}
+.add-btn:hover{background:var(--sky);}
 
-/* GRID */
-.catalog{max-width:1100px;margin:1.5rem auto 3rem;padding:0 2rem;}
-.catalog h2{font-size:1.1rem;font-weight:600;color:#4a5568;margin-bottom:1rem;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.25rem;}
-.card{background:#fff;border:1.5px solid #E2E8F0;border-radius:14px;overflow:hidden;transition:box-shadow 0.2s,transform 0.2s;cursor:default;}
-.card:hover{box-shadow:0 6px 24px rgba(45,46,143,0.1);transform:translateY(-2px);}
-.card-img{background:linear-gradient(135deg,#EEF2FF,#E0F4FF);height:140px;display:flex;align-items:center;justify-content:center;position:relative;}
-.card-img i{font-size:56px;color:#2D2E8F;opacity:0.85;}
-.cat-tag{position:absolute;top:8px;right:8px;background:rgba(41,171,226,0.15);color:#1a6fa3;font-size:0.7rem;font-weight:600;padding:3px 8px;border-radius:6px;}
-.card-body{padding:14px;}
-.card-body h3{font-size:0.92rem;font-weight:600;color:#1a2340;margin-bottom:4px;line-height:1.3;}
-.card-body .desc{font-size:0.78rem;color:#8898b0;margin-bottom:10px;line-height:1.4;}
-.card-footer{display:flex;align-items:center;justify-content:space-between;}
-.price{font-size:1.05rem;font-weight:700;color:#2D2E8F;}
-.add-btn{background:#2D2E8F;color:#fff;border:none;border-radius:8px;padding:7px 13px;font-size:0.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background 0.2s;}
-.add-btn:hover{background:#29ABE2;}
+/* ═══ DETAIL PAGE ═══ */
+.detail-back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:.85rem;font-weight:600;cursor:pointer;padding:1.5rem 5% .5rem;max-width:1200px;margin:0 auto;display:flex;}
+.detail-back i{font-size:18px;}
+.detail-back:hover{color:var(--navy);}
+.detail-inner{max-width:1200px;margin:0 auto;padding:1rem 5% 4rem;display:flex;gap:2.5rem;align-items:flex-start;}
+.detail-img-col{flex:0 0 340px;}
+.detail-img-box{background:linear-gradient(135deg,#EEF2FF,#E0F4FF);border-radius:16px;border:1.5px solid var(--border);height:300px;display:flex;align-items:center;justify-content:center;}
+.detail-img-box i{font-size:100px;color:var(--navy);opacity:.8;}
+.detail-thumbs{display:flex;gap:8px;margin-top:10px;}
+.detail-thumb{width:60px;height:60px;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border 0.2s;}
+.detail-thumb.active,.detail-thumb:hover{border-color:var(--sky);}
+.detail-thumb i{font-size:26px;color:var(--navy);opacity:.6;}
+.detail-info-col{flex:1;min-width:0;}
+.detail-cat-tag{font-size:.75rem;color:var(--sky);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:.5rem;}
+.detail-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.7rem;font-weight:800;color:var(--navy);margin-bottom:.5rem;line-height:1.2;}
+.detail-stars{display:flex;align-items:center;gap:6px;margin-bottom:1rem;}
+.detail-stars .stars{color:var(--warning);font-size:.9rem;}
+.detail-stars span{font-size:.82rem;color:var(--muted);}
+.detail-price-box{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:1rem 1.2rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:1rem;}
+.detail-price .old{font-size:.85rem;color:var(--muted2);text-decoration:line-through;}
+.detail-price .current{font-size:1.8rem;font-weight:800;color:var(--navy);}
+.detail-price .saving{font-size:.78rem;color:var(--success);font-weight:600;background:rgba(16,185,129,.1);padding:3px 8px;border-radius:6px;}
+.detail-qty-row{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;}
+.qty-ctrl{display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:4px 8px;}
+.qty-btn-sm{background:none;border:none;color:var(--navy);font-size:1.2rem;font-weight:700;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:background 0.2s;}
+.qty-btn-sm:hover{background:rgba(45,46,143,.1);}
+.qty-val{font-weight:700;font-size:1rem;min-width:24px;text-align:center;}
+.btn-add-detail{flex:1;background:var(--navy);color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:.95rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.2s;font-family:'Inter',sans-serif;}
+.btn-add-detail:hover{background:var(--sky);}
+.detail-specs{margin-top:1.2rem;}
+.detail-specs h4{font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1.5px solid var(--border);}
+.spec-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:.85rem;}
+.spec-row:last-child{border-bottom:none;}
+.spec-row .label{color:var(--muted);font-weight:500;}
+.spec-row .val{font-weight:600;color:var(--text);}
+.detail-desc{margin-top:1.2rem;background:var(--bg);border-radius:12px;padding:1rem 1.2rem;}
+.detail-desc h4{font-family:'Plus Jakarta Sans',sans-serif;font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:.6rem;}
+.detail-desc p{font-size:.85rem;color:var(--muted);line-height:1.7;}
+.related-section{max-width:1200px;margin:0 auto;padding:0 5% 4rem;}
+.related-section h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:1rem;}
+.related-carousel{display:flex;gap:1rem;overflow-x:auto;padding-bottom:.5rem;scrollbar-width:thin;}
+.related-carousel::-webkit-scrollbar{height:4px;}
+.related-carousel::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
 
-/* CART PANEL */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;}
-.overlay.open{display:block;}
-.cart-panel{position:fixed;right:0;top:0;height:100%;width:380px;max-width:95vw;background:#fff;z-index:201;transform:translateX(100%);transition:transform 0.3s ease;display:flex;flex-direction:column;}
-.cart-panel.open{transform:translateX(0);}
-.cart-header{padding:1.25rem 1.5rem;border-bottom:1.5px solid #E2E8F0;display:flex;align-items:center;justify-content:space-between;}
-.cart-header h2{font-size:1.1rem;font-weight:700;color:#2D2E8F;}
-.close-btn{background:none;border:none;cursor:pointer;color:#8898b0;font-size:22px;display:flex;}
-.cart-items{flex:1;overflow-y:auto;padding:1rem 1.5rem;}
-.cart-empty{text-align:center;padding:3rem 1rem;color:#b0bec5;}
-.cart-empty i{font-size:48px;display:block;margin-bottom:1rem;}
-.cart-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #F0F4F8;}
-.ci-icon{width:44px;height:44px;background:#EEF2FF;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.ci-icon i{font-size:22px;color:#2D2E8F;}
-.ci-info{flex:1;}
-.ci-info h4{font-size:0.85rem;font-weight:600;color:#1a2340;margin-bottom:2px;}
-.ci-info .ci-price{font-size:0.82rem;color:#29ABE2;font-weight:600;}
-.ci-qty{display:flex;align-items:center;gap:6px;}
-.qty-btn{background:#F0F4F8;border:none;border-radius:6px;width:26px;height:26px;cursor:pointer;font-size:1rem;font-weight:700;color:#2D2E8F;display:flex;align-items:center;justify-content:center;}
-.qty-btn:hover{background:#2D2E8F;color:#fff;}
-.qty-num{font-size:0.9rem;font-weight:600;min-width:20px;text-align:center;}
-.cart-footer{padding:1.25rem 1.5rem;border-top:1.5px solid #E2E8F0;}
-.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
-.cart-total span{font-size:0.9rem;color:#4a5568;}
-.cart-total strong{font-size:1.2rem;font-weight:700;color:#2D2E8F;}
-.wa-btn{width:100%;background:#25D366;color:#fff;border:none;border-radius:12px;padding:14px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:background 0.2s;}
-.wa-btn:hover{background:#1ebe5b;}
-.wa-note{font-size:0.75rem;color:#8898b0;text-align:center;margin-top:8px;}
+/* ═══ CART SIDEBAR ═══ */
+.cart-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:1100;}
+.cart-overlay.open{display:block;}
+.cart-sidebar{position:fixed;right:0;top:0;height:100%;width:390px;max-width:96vw;background:#fff;z-index:1101;transform:translateX(100%);transition:transform 0.32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,0.12);}
+.cart-sidebar.open{transform:translateX(0);}
+.cart-header{padding:1.2rem 1.5rem;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.cart-header h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.1rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px;}
+.cart-close{background:none;border:none;cursor:pointer;color:var(--muted);font-size:22px;display:flex;border-radius:8px;padding:4px;transition:background 0.2s;}
+.cart-close:hover{background:var(--bg2);}
+.cart-items-wrap{flex:1;overflow-y:auto;padding:1rem 1.5rem;}
+.cart-empty-state{text-align:center;padding:3.5rem 1rem;color:var(--muted2);}
+.cart-empty-state i{font-size:52px;display:block;margin-bottom:1rem;color:var(--border2);}
+.cart-empty-state p{font-size:.9rem;}
+.cart-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--bg2);}
+.ci-thumb{width:46px;height:46px;background:linear-gradient(135deg,#EEF2FF,#E0F4FF);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ci-thumb i{font-size:24px;color:var(--navy);opacity:.8;}
+.ci-info{flex:1;min-width:0;}
+.ci-info h4{font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ci-price{font-size:.82rem;color:var(--sky);font-weight:700;}
+.ci-qty-ctrl{display:flex;align-items:center;gap:5px;}
+.ci-qty-btn{background:var(--bg2);border:none;border-radius:6px;width:26px;height:26px;cursor:pointer;font-size:.95rem;font-weight:700;color:var(--navy);display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.ci-qty-btn:hover{background:var(--navy);color:#fff;}
+.ci-qty-num{font-size:.88rem;font-weight:600;min-width:20px;text-align:center;}
+.cart-remove{background:none;border:none;color:var(--muted2);cursor:pointer;font-size:16px;display:flex;border-radius:6px;padding:3px;transition:all 0.2s;margin-left:2px;}
+.cart-remove:hover{color:var(--danger);background:rgba(239,68,68,.08);}
+.cart-footer{padding:1.2rem 1.5rem;border-top:1.5px solid var(--border);}
+.cart-subtotal{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;}
+.cart-subtotal span{font-size:.88rem;color:var(--muted);}
+.cart-subtotal strong{font-size:1.25rem;font-weight:800;color:var(--navy);}
+.cart-note-text{font-size:.75rem;color:var(--muted2);margin-bottom:.8rem;line-height:1.5;}
+.wa-send-btn{width:100%;background:var(--green);color:#fff;border:none;border-radius:12px;padding:14px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:background 0.2s;font-family:'Inter',sans-serif;}
+.wa-send-btn:hover{background:var(--green2);}
+.cart-clear-btn{width:100%;background:none;border:1.5px solid var(--border);color:var(--muted);border-radius:10px;padding:9px;font-size:.82rem;font-weight:600;cursor:pointer;margin-top:8px;transition:all 0.2s;font-family:'Inter',sans-serif;}
+.cart-clear-btn:hover{border-color:var(--danger);color:var(--danger);}
 
-/* FOOTER */
-footer{background:#1a2340;color:rgba(255,255,255,0.6);text-align:center;padding:1.5rem 2rem;font-size:0.82rem;}
-footer strong{color:#fff;}
+/* ═══ FAQ ═══ */
+.faq-wrap{max-width:760px;margin:0 auto;padding:3rem 5% 4rem;}
+.faq-wrap h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.8rem;font-weight:800;color:var(--navy);margin-bottom:2rem;text-align:center;}
+.faq-item{background:#fff;border:1.5px solid var(--border);border-radius:13px;margin-bottom:.75rem;overflow:hidden;}
+.faq-q{width:100%;background:none;border:none;text-align:left;padding:1.1rem 1.3rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Inter',sans-serif;font-size:.92rem;font-weight:600;color:var(--navy);transition:background 0.2s;}
+.faq-q:hover{background:var(--bg);}
+.faq-q i{font-size:20px;color:var(--sky);transition:transform 0.3s;flex-shrink:0;}
+.faq-q.open i{transform:rotate(180deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.35s ease;}
+.faq-a.open{max-height:400px;}
+.faq-a-inner{padding:.2rem 1.3rem 1.1rem;font-size:.87rem;color:var(--muted);line-height:1.7;}
+
+/* ═══ CONTACTO ═══ */
+.contact-wrap{max-width:900px;margin:0 auto;padding:3rem 5% 4rem;}
+.contact-wrap h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.8rem;font-weight:800;color:var(--navy);margin-bottom:.5rem;text-align:center;}
+.contact-sub{text-align:center;color:var(--muted);margin-bottom:2.5rem;font-size:.95rem;}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.contact-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:1.8rem;text-align:center;transition:all 0.25s;}
+.contact-card:hover{border-color:var(--sky);box-shadow:var(--shadow-lg);}
+.contact-card i{font-size:36px;color:var(--navy);margin-bottom:.8rem;display:block;}
+.contact-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1rem;color:var(--navy);margin-bottom:.4rem;}
+.contact-card p{font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;}
+.contact-card a,.contact-card button{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:9px;font-size:.85rem;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+.btn-wa{background:var(--green);color:#fff;}
+.btn-wa:hover{background:var(--green2);}
+.btn-navy{background:var(--navy);color:#fff;}
+.btn-navy:hover{background:var(--navy-dark);}
+.horario-box{background:var(--bg);border:1.5px solid var(--border);border-radius:14px;padding:1.5rem;margin-top:1.5rem;}
+.horario-box h3{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1rem;color:var(--navy);margin-bottom:1rem;}
+.horario-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:.85rem;}
+.horario-row:last-child{border-bottom:none;}
+.horario-row .dia{color:var(--muted);font-weight:500;}
+.horario-row .hora{font-weight:600;color:var(--text);}
+
+/* ═══ WA FLOAT ═══ */
+.wa-float{position:fixed;bottom:26px;right:26px;width:58px;height:58px;border-radius:50%;background:var(--green);box-shadow:0 4px 20px rgba(37,211,102,0.45);display:flex;align-items:center;justify-content:center;z-index:900;text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;}
+.wa-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(37,211,102,0.65);}
+.wa-float i{color:#fff;font-size:28px;}
+
+/* ═══ FOOTER ═══ */
+footer{background:var(--navy-dark);color:rgba(255,255,255,.6);padding:2.5rem 5%;margin-top:0;}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-brand{display:flex;align-items:center;gap:10px;}
+.footer-brand i{font-size:22px;color:var(--sky);}
+.footer-brand span{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:#fff;font-size:1.05rem;}
+.footer-links{display:flex;gap:1.5rem;flex-wrap:wrap;}
+.footer-links a{color:rgba(255,255,255,.5);text-decoration:none;font-size:.82rem;cursor:pointer;transition:color 0.2s;}
+.footer-links a:hover{color:#fff;}
+.footer-copy{font-size:.78rem;text-align:center;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);}
+
+/* ═══ UTILS ═══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.fade-up{animation:fadeUp 0.5s ease both;}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:900px){
+  .hero-inner{flex-direction:column;text-align:center;}
+  .hero-desc{max-width:100%;}
+  .hero-actions{justify-content:center;}
+  .hero-badges{justify-content:center;}
+  .hero-visual{flex:0 0 auto;width:100%;max-width:300px;}
+  .detail-inner{flex-direction:column;}
+  .detail-img-col{flex:0 0 auto;width:100%;}
+  .contact-grid{grid-template-columns:1fr;}
+  .steps-grid::before{display:none;}
+}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .nav-cart-text{display:none;}
+  .products-grid{grid-template-columns:repeat(2,1fr);}
+  .filter-btns{display:none;}
+  .filter-select{display:block;}
+}
+@media(max-width:480px){
+  .products-grid{grid-template-columns:1fr;}
+  .steps-grid{grid-template-columns:1fr 1fr;}
+}
 </style>
 </head>
 <body>
 
+<div class="toast" id="toast"></div>
+
+<!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <div class="logo-wrap">
-      <div class="logo-icon"><i class="ti ti-tooth"></i></div>
-      <div>
-        <span class="logo-text">DentiBox</span>
-        <span class="logo-sub">INSUMOS ODONTOLÓGICOS</span>
+    <a class="nav-logo" onclick="showPage('inicio')">
+      <div class="nav-logo-icon"><i class="ti ti-tooth"></i></div>
+      <div class="nav-logo-texts">
+        <span class="brand">DentiBox</span>
+        <span class="tagline">Insumos Odontológicos</span>
       </div>
-    </div>
+    </a>
+    <ul class="nav-links">
+      <li><a onclick="showPage('inicio')" id="nav-inicio">Inicio</a></li>
+      <li><a onclick="showPage('tienda')" id="nav-tienda">Catálogo</a></li>
+      <li><a onclick="showPage('faq')" id="nav-faq">FAQ</a></li>
+      <li><a onclick="showPage('contacto')" id="nav-contacto">Contacto</a></li>
+    </ul>
     <div class="nav-right">
-      <button class="cart-btn" onclick="openCart()">
-        <i class="ti ti-shopping-cart"></i> Mi pedido
-        <span class="cart-badge" id="cart-count">0</span>
+      <button class="nav-cart-btn" onclick="toggleCart()">
+        <i class="ti ti-shopping-cart"></i>
+        <span class="nav-cart-text">Mi pedido</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menú">
+        <span></span><span></span><span></span>
       </button>
     </div>
   </div>
 </nav>
 
-<div class="hero">
-  <div class="hero-inner">
-    <div class="hero-text">
-      <h1>Insumos dentales,<br><span>directo a tu clínica</span></h1>
-      <p>Todos los materiales que tu consultorio necesita. Hacé tu pedido online y coordinamos la entrega por WhatsApp o llamada.</p>
-      <div class="hero-badges">
-        <span class="badge"><i class="ti ti-brand-whatsapp"></i> Pedidos por WhatsApp</span>
-        <span class="badge"><i class="ti ti-truck-delivery"></i> Envíos rápidos</span>
-        <span class="badge"><i class="ti ti-shield-check"></i> Productos originales</span>
-      </div>
-    </div>
-    <div class="hero-img"><i class="ti ti-tooth"></i></div>
-  </div>
+<div class="mobile-menu" id="mobileMenu">
+  <a onclick="showPage('inicio');closeMobileMenu()">Inicio</a>
+  <a onclick="showPage('tienda');closeMobileMenu()">Catálogo</a>
+  <a onclick="showPage('faq');closeMobileMenu()">FAQ</a>
+  <a onclick="showPage('contacto');closeMobileMenu()">Contacto</a>
 </div>
 
-<div class="toolbar">
-  <div class="toolbar-inner">
-    <div class="search-wrap">
-      <i class="ti ti-search"></i>
-      <input type="text" id="search-input" placeholder="Buscar productos..." oninput="filterProducts()"/>
-    </div>
-    <div class="filter-btns">
-      <button class="filter-btn active" onclick="setFilter('todos',this)">Todos</button>
-      <button class="filter-btn" onclick="setFilter('material',this)">Materiales</button>
-      <button class="filter-btn" onclick="setFilter('instrumental',this)">Instrumental</button>
-      <button class="filter-btn" onclick="setFilter('descartable',this)">Descartables</button>
-      <button class="filter-btn" onclick="setFilter('proteccion',this)">Protección</button>
-    </div>
-  </div>
-</div>
-
-<div class="catalog">
-  <h2 id="result-label">Todos los productos</h2>
-  <div class="grid" id="product-grid"></div>
-</div>
-
-<div class="overlay" id="overlay" onclick="closeCart()"></div>
-<div class="cart-panel" id="cart-panel">
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
   <div class="cart-header">
-    <h2><i class="ti ti-shopping-cart" style="margin-right:6px"></i>Mi pedido</h2>
-    <button class="close-btn" onclick="closeCart()"><i class="ti ti-x"></i></button>
+    <h2><i class="ti ti-shopping-cart"></i> Mi pedido</h2>
+    <button class="cart-close" onclick="toggleCart()"><i class="ti ti-x"></i></button>
   </div>
-  <div class="cart-items" id="cart-items">
-    <div class="cart-empty"><i class="ti ti-basket"></i>Aún no agregaste productos</div>
+  <div class="cart-items-wrap" id="cartItems">
+    <div class="cart-empty-state"><i class="ti ti-basket"></i><p>Tu carrito está vacío.<br>¡Agregá productos para armar tu pedido!</p></div>
   </div>
-  <div class="cart-footer">
-    <div class="cart-total"><span>Total estimado</span><strong id="cart-total">$0</strong></div>
-    <button class="wa-btn" onclick="sendWhatsApp()">
+  <div class="cart-footer" id="cartFooter" style="display:none;">
+    <div class="cart-subtotal"><span>Total estimado</span><strong id="cartTotal">$0</strong></div>
+    <p class="cart-note-text">Los precios son orientativos. Confirmamos disponibilidad y precio final por WhatsApp antes de procesar el pedido.</p>
+    <button class="wa-send-btn" onclick="sendWhatsApp()">
       <i class="ti ti-brand-whatsapp" style="font-size:22px"></i> Enviar pedido por WhatsApp
     </button>
-    <p class="wa-note">Te contactaremos para confirmar disponibilidad y coordinar entrega</p>
+    <button class="cart-clear-btn" onclick="clearCart()">Vaciar carrito</button>
   </div>
 </div>
 
+<!-- ═══ PAGE: INICIO ═══ -->
+<div id="page-inicio" class="page active">
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-eyebrow"><i class="ti ti-tooth"></i> Tu proveedor de confianza</div>
+        <h1 class="hero-title">Insumos dentales<br>para tu <span class="hl">consultorio</span></h1>
+        <p class="hero-desc">Todo lo que necesitás en un solo lugar. Armá tu pedido online y lo coordinamos por WhatsApp o llamada. Rápido, simple y confiable.</p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="showPage('tienda')"><i class="ti ti-layout-grid"></i> Ver catálogo</button>
+          <a class="btn-outline-white" href="https://wa.me/5491100000000" target="_blank"><i class="ti ti-brand-whatsapp"></i> Escribinos</a>
+        </div>
+        <div class="hero-badges">
+          <span class="hbadge"><i class="ti ti-brand-whatsapp"></i> Pedidos por WhatsApp</span>
+          <span class="hbadge"><i class="ti ti-truck-delivery"></i> Envíos rápidos</span>
+          <span class="hbadge"><i class="ti ti-shield-check"></i> Productos originales</span>
+          <span class="hbadge"><i class="ti ti-clock"></i> Respuesta en el día</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card-demo">
+          <i class="ti ti-tooth"></i>
+          <div class="hcd-title">+500 productos</div>
+          <div class="hcd-sub">para tu clínica dental</div>
+          <div class="hero-brands">
+            <span class="hbrand">3M</span>
+            <span class="hbrand">GC</span>
+            <span class="hbrand">Kerr</span>
+            <span class="hbrand">Dentsply</span>
+            <span class="hbrand">Kavo</span>
+            <span class="hbrand">NSK</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="features-inner">
+      <div class="section-header">
+        <h2>¿Por qué elegir DentiBox?</h2>
+        <p>Antes teníamos punto físico. Ahora llegamos directo a vos.</p>
+        <div class="accent-bar"></div>
+      </div>
+      <div class="features-grid">
+        <div class="feat-card"><div class="feat-icon"><i class="ti ti-package"></i></div><h3>Amplio catálogo</h3><p>Materiales, instrumental, descartables y equipos de las principales marcas del mercado.</p></div>
+        <div class="feat-card"><div class="feat-icon"><i class="ti ti-brand-whatsapp"></i></div><h3>Pedidos simples</h3><p>Armá tu carrito online y te mandamos el resumen. Confirmamos todo por WhatsApp en minutos.</p></div>
+        <div class="feat-card"><div class="feat-icon"><i class="ti ti-truck-delivery"></i></div><h3>Entrega rápida</h3><p>Coordinamos la entrega según tu zona. La mayoría de los pedidos se despachan el mismo día.</p></div>
+        <div class="feat-card"><div class="feat-icon"><i class="ti ti-certificate"></i></div><h3>Productos originales</h3><p>Trabajamos con distribuidores autorizados. Todos los productos tienen garantía del fabricante.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="steps-inner">
+      <div class="section-header">
+        <h2>¿Cómo hacer tu pedido?</h2>
+        <p>En 3 pasos tenés tus insumos camino al consultorio</p>
+        <div class="accent-bar"></div>
+      </div>
+      <div class="steps-grid">
+        <div class="step"><div class="step-num">1</div><h4>Explorá el catálogo</h4><p>Buscá por categoría o nombre, revisá especificaciones y precio.</p></div>
+        <div class="step"><div class="step-num">2</div><h4>Armá tu carrito</h4><p>Agregá todos los productos que necesitás y ajustá las cantidades.</p></div>
+        <div class="step"><div class="step-num">3</div><h4>Enviá por WhatsApp</h4><p>Con un clic mandamos tu pedido y coordinamos entrega y pago.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESTACADOS -->
+  <div style="background:#fff;padding:3rem 5%;border-top:1.5px solid var(--border);">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div class="section-header" style="margin-bottom:1.5rem;">
+        <h2>Más vendidos</h2>
+        <p>Los productos que más piden los odontólogos esta semana</p>
+        <div class="accent-bar"></div>
+      </div>
+      <div class="products-grid" id="featured-grid"></div>
+      <div style="text-align:center;margin-top:2rem;">
+        <button class="btn-primary" onclick="showPage('tienda')" style="background:var(--navy);">Ver catálogo completo <i class="ti ti-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIOS -->
+  <div class="testimonials">
+    <div class="testimonials-inner">
+      <div class="section-header">
+        <h2>Lo que dicen nuestros clientes</h2>
+        <p>Odontólogos que confían en DentiBox</p>
+        <div class="accent-bar"></div>
+      </div>
+      <div class="t-carousel-outer">
+        <div class="t-track" id="tTrack">
+          <div class="t-card"><blockquote>Llevo más de dos años comprando en DentiBox y nunca tuve un problema. El composite Filtek siempre llega rápido y en perfectas condiciones. La atención por WhatsApp es excelente.</blockquote><div class="t-author">Dra. Valentina Rodríguez — Odontóloga General, Buenos Aires</div><div class="t-stars">★★★★★</div></div>
+          <div class="t-card"><blockquote>Me pasé a DentiBox cuando cerraron mi proveedor de siempre. Los precios son muy competitivos y la variedad de material de ortodoncia que tienen es difícil de encontrar en otro lado.</blockquote><div class="t-author">Dr. Martín Fernández — Ortodoncista, Córdoba</div><div class="t-stars">★★★★★</div></div>
+          <div class="t-card"><blockquote>Lo que más valoro es la comodidad. Armo el pedido a la noche desde el catálogo, les mando el mensaje y al otro día ya tengo todo en el consultorio. Muy recomendable.</blockquote><div class="t-author">Dra. Carolina Suárez — Endodoncista, Rosario</div><div class="t-stars">★★★★☆</div></div>
+        </div>
+      </div>
+      <div class="t-dots" id="tDots"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ PAGE: TIENDA ═══ -->
+<div id="page-tienda" class="page">
+  <div class="tienda-hero">
+    <div class="tienda-hero-inner">
+      <h1>Catálogo de productos</h1>
+      <p>Encontrá todo lo que tu consultorio necesita</p>
+    </div>
+  </div>
+  <div class="catalog-wrap">
+    <div class="catalog-toolbar">
+      <div class="search-wrap">
+        <i class="ti ti-search"></i>
+        <input type="text" id="searchInput" placeholder="Buscar productos, marcas..." oninput="filterProducts()"/>
+      </div>
+      <div class="filter-btns" id="filterBtns">
+        <button class="filter-btn active" onclick="setFilter('todos',this)">Todos</button>
+        <button class="filter-btn" onclick="setFilter('material',this)">Materiales</button>
+        <button class="filter-btn" onclick="setFilter('instrumental',this)">Instrumental</button>
+        <button class="filter-btn" onclick="setFilter('descartable',this)">Descartables</button>
+        <button class="filter-btn" onclick="setFilter('proteccion',this)">Protección</button>
+        <button class="filter-btn" onclick="setFilter('endodoncia',this)">Endodoncia</button>
+        <button class="filter-btn" onclick="setFilter('ortodoncia',this)">Ortodoncia</button>
+      </div>
+      <select class="filter-select" id="filterSelect" onchange="setFilterMobile(this.value)">
+        <option value="todos">Todos</option>
+        <option value="material">Materiales</option>
+        <option value="instrumental">Instrumental</option>
+        <option value="descartable">Descartables</option>
+        <option value="proteccion">Protección</option>
+        <option value="endodoncia">Endodoncia</option>
+        <option value="ortodoncia">Ortodoncia</option>
+      </select>
+    </div>
+    <p class="result-label" id="resultLabel">Cargando productos...</p>
+    <div class="products-grid" id="productGrid"></div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: DETALLE ═══ -->
+<div id="page-producto" class="page">
+  <div style="background:#fff;border-bottom:1.5px solid var(--border);">
+    <div style="max-width:1200px;margin:0 auto;padding:1rem 5% 0;" onclick="goBackFromDetail()" style="cursor:pointer;">
+      <span class="detail-back" style="cursor:pointer;"><i class="ti ti-arrow-left"></i> Volver al catálogo</span>
+    </div>
+  </div>
+  <div class="detail-inner" id="detailContent"></div>
+  <div class="related-section">
+    <h3>Productos relacionados</h3>
+    <div class="related-carousel" id="relatedCarousel"></div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: FAQ ═══ -->
+<div id="page-faq" class="page">
+  <div class="tienda-hero"><div class="tienda-hero-inner"><h1>Preguntas frecuentes</h1><p>Todo lo que necesitás saber sobre DentiBox</p></div></div>
+  <div class="faq-wrap">
+    <div id="faqList"></div>
+  </div>
+</div>
+
+<!-- ═══ PAGE: CONTACTO ═══ -->
+<div id="page-contacto" class="page">
+  <div class="tienda-hero"><div class="tienda-hero-inner"><h1>Contacto</h1><p>Estamos para ayudarte</p></div></div>
+  <div class="contact-wrap">
+    <div class="contact-grid">
+      <div class="contact-card">
+        <i class="ti ti-brand-whatsapp" style="color:var(--green)"></i>
+        <h3>WhatsApp</h3>
+        <p>La forma más rápida de hacernos tu pedido o consulta. Respondemos en el día.</p>
+        <a class="btn-wa" href="https://wa.me/5491100000000" target="_blank"><i class="ti ti-brand-whatsapp"></i> Escribir por WhatsApp</a>
+      </div>
+      <div class="contact-card">
+        <i class="ti ti-phone"></i>
+        <h3>Llamada telefónica</h3>
+        <p>Preferís hablar directamente? Llamanos en el horario de atención y te asesoramos.</p>
+        <a class="btn-navy" href="tel:+5491100000000"><i class="ti ti-phone"></i> Llamar ahora</a>
+      </div>
+    </div>
+    <div class="horario-box">
+      <h3><i class="ti ti-clock" style="margin-right:6px;color:var(--sky)"></i> Horario de atención</h3>
+      <div class="horario-row"><span class="dia">Lunes a Viernes</span><span class="hora">8:00 – 18:00 hs</span></div>
+      <div class="horario-row"><span class="dia">Sábados</span><span class="hora">9:00 – 13:00 hs</span></div>
+      <div class="horario-row"><span class="dia">Domingos y feriados</span><span class="hora">Cerrado</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- WA FLOAT -->
+<a class="wa-float" href="https://wa.me/5491100000000" target="_blank" aria-label="WhatsApp">
+  <i class="ti ti-brand-whatsapp"></i>
+</a>
+
+<!-- FOOTER -->
 <footer>
-  <strong>DentiBox</strong> · Insumos Odontológicos · Pedidos por WhatsApp o llamada
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <i class="ti ti-tooth"></i>
+      <span>DentiBox</span>
+    </div>
+    <div class="footer-links">
+      <a onclick="showPage('inicio')">Inicio</a>
+      <a onclick="showPage('tienda')">Catálogo</a>
+      <a onclick="showPage('faq')">FAQ</a>
+      <a onclick="showPage('contacto')">Contacto</a>
+    </div>
+  </div>
+  <div class="footer-copy">© 2025 DentiBox · Insumos Odontológicos · Todos los derechos reservados</div>
 </footer>
 
 <script>
 const WA_NUMBER = "5491100000000";
 
 const PRODUCTS = [
-  {id:1,name:"Composite Filtek Z350",desc:"Resina compuesta nanofilled, kit 8 jeringas",price:28500,cat:"material",icon:"ti-droplet"},
-  {id:2,name:"Cemento de ionómero",desc:"Fuji IX GP Extra, polvo + líquido 15g",price:12800,cat:"material",icon:"ti-flask"},
-  {id:3,name:"Hidróxido de calcio",desc:"Dycal, base + catalizador, 13.5ml",price:6400,cat:"material",icon:"ti-test-pipe"},
-  {id:4,name:"Alginato cromotrópico",desc:"Jeltrate, bolsa 1kg, fraguado rápido",price:9200,cat:"material",icon:"ti-droplet-half"},
-  {id:5,name:"Anestesia Articaína 4%",desc:"Con epinefrina 1:100.000, caja x50 carpules",price:18600,cat:"material",icon:"ti-injection"},
-  {id:6,name:"Brackets metálicos Roth",desc:"Kit completo 022, 5 piezas + molares",price:22000,cat:"instrumental",icon:"ti-align-center"},
-  {id:7,name:"Fresas de diamante",desc:"Set 10 unidades, grano fino y medio",price:8500,cat:"instrumental",icon:"ti-tool"},
-  {id:8,name:"Espejos bucales nº5",desc:"Sin mango, caja x12, acero inoxidable",price:4200,cat:"instrumental",icon:"ti-circle"},
-  {id:9,name:"Sonda periodontal",desc:"OMS, marcas negras, mango hexagonal",price:3800,cat:"instrumental",icon:"ti-line"},
-  {id:10,name:"Guantes de nitrilo S",desc:"Caja x100, sin polvo, talla S",price:5600,cat:"descartable",icon:"ti-hand-stop"},
-  {id:11,name:"Guantes de nitrilo M",desc:"Caja x100, sin polvo, talla M",price:5600,cat:"descartable",icon:"ti-hand-stop"},
-  {id:12,name:"Baberos descartables",desc:"Papel + polietileno, paquete x100",price:3100,cat:"descartable",icon:"ti-file"},
-  {id:13,name:"Vasos descartables",desc:"200ml, paquete x100 unidades",price:1800,cat:"descartable",icon:"ti-cup"},
-  {id:14,name:"Barbijos quirúrgicos",desc:"Tricapa, caja x50, certificado",price:4400,cat:"proteccion",icon:"ti-mask"},
-  {id:15,name:"Antiparras de seguridad",desc:"Policarbonato, ventilación lateral, x1",price:3200,cat:"proteccion",icon:"ti-eyeglass"},
-  {id:16,name:"Camisolín descartable",desc:"PP 35g, manga larga, talla única x10",price:7800,cat:"proteccion",icon:"ti-shirt"},
+  {id:1,name:"Composite Filtek Z350 XT",desc:"Resina compuesta nanofilled universal. Kit 8 jeringas 4g, todos los colores.",price:28500,oldPrice:32000,cat:"material",icon:"ti-droplet",marca:"3M",badge:"oferta",featured:true,specs:{Marca:"3M",Presentación:"Kit 8 jeringas 4g",Tipo:"Nanohíbrido",Indicación:"Clase I, II, III, IV, V"}},
+  {id:2,name:"Cemento Ionómero Fuji IX GP",desc:"Cemento de vidrio ionómero de alta viscosidad. Polvo 15g + líquido 8ml.",price:12800,cat:"material",icon:"ti-flask",marca:"GC",featured:true,specs:{Marca:"GC",Presentación:"Polvo + líquido",Tipo:"Ionómero alta viscosidad",Usos:"Base, obturación cervical"}},
+  {id:3,name:"Hidróxido de Calcio Dycal",desc:"Base y catalizador 13.5ml. Protección pulpar directa e indirecta.",price:6400,cat:"material",icon:"ti-test-pipe",marca:"Dentsply",specs:{Marca:"Dentsply Sirona",Presentación:"Base + catalizador 13.5ml",Tipo:"2 pastas"}},
+  {id:4,name:"Alginato Jeltrate Cromotrópico",desc:"Alginato cromotrópico indicador de tiempo de trabajo. Bolsa 1kg.",price:9200,cat:"material",icon:"ti-droplet-half",marca:"Dentsply",specs:{Marca:"Dentsply",Presentación:"Bolsa 1 kg",Tipo:"Cromotrópico"}},
+  {id:5,name:"Anestesia Articaína 4% c/Epinefrina",desc:"Con epinefrina 1:100.000. Carpules 1.8ml. Caja x50 unidades.",price:18600,oldPrice:21000,cat:"material",icon:"ti-injection",marca:"Septodont",badge:"oferta",featured:true,specs:{Marca:"Septodont",Presentación:"Caja x50 carpules",Concentración:"4% + epi 1:100.000",Vol:"1.8ml / carpule"}},
+  {id:6,name:"Brackets Metálicos Roth 022",desc:"Kit completo premolares y molares. Slot 0.022\". 5 piezas incluidas.",price:22000,cat:"ortodoncia",icon:"ti-align-center",marca:"Morelli",featured:true,specs:{Marca:"Morelli",Slot:"0.022\"",Prescripción:"Roth",Contenido:"Kit completo + molares"}},
+  {id:7,name:"Set Fresas de Diamante x10",desc:"Grano fino y medio. Varios perfiles incluidos. Para pieza de mano de alta.",price:8500,cat:"instrumental",icon:"ti-tool",marca:"Komet",specs:{Marca:"Komet",Contenido:"10 unidades",Grano:"Fino y medio",Uso:"Alta velocidad"}},
+  {id:8,name:"Espejos Bucales N°5 x12",desc:"Sin mango. Acero inoxidable. Esterilizables en autoclave. Caja x12.",price:4200,cat:"instrumental",icon:"ti-circle",marca:"Hu-Friedy",specs:{Marca:"Hu-Friedy",Nro:"5",Material:"Acero inoxidable",Contenido:"Caja x12"}},
+  {id:9,name:"Sonda Periodontal OMS",desc:"Marcas negras en 3,5 - 8,5 y 11,5mm. Mango hexagonal. Acero inox.",price:3800,cat:"instrumental",icon:"ti-line",marca:"Hu-Friedy",specs:{Marca:"Hu-Friedy",Tipo:"OMS",Material:"Acero inox",Marcas:"3.5 / 8.5 / 11.5mm"}},
+  {id:10,name:"Guantes de Nitrilo Sin Polvo - Talla S",desc:"Talla S. Caja x100 unidades. Ambidiestros, sin polvo, alta sensibilidad táctil.",price:5600,cat:"descartable",icon:"ti-hand-stop",marca:"Medline",specs:{Marca:"Medline",Talla:"S",Contenido:"Caja x100",Material:"Nitrilo"}},
+  {id:11,name:"Guantes de Nitrilo Sin Polvo - Talla M",desc:"Talla M. Caja x100 unidades. Ambidiestros, sin polvo, alta sensibilidad táctil.",price:5600,cat:"descartable",icon:"ti-hand-stop",marca:"Medline",specs:{Marca:"Medline",Talla:"M",Contenido:"Caja x100",Material:"Nitrilo"}},
+  {id:12,name:"Guantes de Nitrilo Sin Polvo - Talla L",desc:"Talla L. Caja x100 unidades. Ambidiestros, sin polvo, alta sensibilidad táctil.",price:5600,cat:"descartable",icon:"ti-hand-stop",marca:"Medline",specs:{Marca:"Medline",Talla:"L",Contenido:"Caja x100",Material:"Nitrilo"}},
+  {id:13,name:"Baberos Descartables x100",desc:"Papel + polietileno tricapa. Impermeables. Paquete x100 unidades.",price:3100,cat:"descartable",icon:"ti-file",marca:"Prolab",specs:{Marca:"Prolab",Material:"Papel + PE",Contenido:"x100 unidades",Tipo:"Tricapa"}},
+  {id:14,name:"Vasos Descartables 200ml x100",desc:"200ml. Plástico transparente. Paquete x100 unidades.",price:1800,cat:"descartable",icon:"ti-cup",marca:"Genérico",specs:{Capacidad:"200ml",Material:"Plástico PS",Contenido:"x100"}},
+  {id:15,name:"Barbijos Quirúrgicos Tricapa x50",desc:"Tricapa, con broches. Certificado ANMAT. Caja x50 unidades.",price:4400,cat:"proteccion",icon:"ti-mask",marca:"Ainsur",badge:"nuevo",specs:{Marca:"Ainsur",Capas:"3",Contenido:"Caja x50",Certificación:"ANMAT"}},
+  {id:16,name:"Antiparras de Seguridad",desc:"Policarbonato, ventilación lateral, ajuste universal. Unidad.",price:3200,cat:"proteccion",icon:"ti-eyeglass",marca:"3M",specs:{Marca:"3M",Material:"Policarbonato",Tipo:"Ventilación lateral",Contenido:"x1 unidad"}},
+  {id:17,name:"Camisolines Descartables x10",desc:"PP no tejido 35g, manga larga, elástico en puños y cuello. Talla única.",price:7800,cat:"proteccion",icon:"ti-shirt",marca:"Prolab",specs:{Marca:"Prolab",Gramaje:"35g",Contenido:"x10 unidades",Talla:"Única"}},
+  {id:18,name:"Limas Endodónticas K-File x6",desc:"Acero inoxidable. Set 6 limas tamaños 15 al 40. Longitud 25mm.",price:5200,cat:"endodoncia",icon:"ti-needle",marca:"Dentsply",featured:true,specs:{Marca:"Dentsply",Tamaños:"15-40",Longitud:"25mm",Material:"Acero inoxidable"}},
+  {id:19,name:"Hipoclorito de Sodio 5.25% x1L",desc:"Solución irrigante. Alta pureza. Frasco x1 litro.",price:2800,cat:"endodoncia",icon:"ti-droplet-filled",marca:"Biodinâmica",specs:{Concentración:"5.25%",Presentación:"Frasco 1L",Uso:"Irrigación endodóntica"}},
+  {id:20,name:"Alambres Niti Redondos .014 x10",desc:"Níquel-titanio súperelásticos. Redondos .014. Paquete x10.",price:6900,cat:"ortodoncia",icon:"ti-line-dashed",marca:"Morelli",specs:{Marca:"Morelli",Material:"NiTi súperelástico",Sección:"Redondo .014",Contenido:"x10"}},
 ];
 
-let cart = {};
-let activeFilter = "todos";
+const FAQS = [
+  {q:"¿Cómo hago un pedido?",a:"Muy simple: buscá los productos en el catálogo, agregálos al carrito y hacé clic en 'Enviar pedido por WhatsApp'. Te llegará un mensaje con el detalle y nos ponemos en contacto para confirmar disponibilidad, precio final y coordinar la entrega."},
+  {q:"¿Cuáles son los medios de pago?",a:"Aceptamos transferencia bancaria, efectivo y MercadoPago. Te informamos los datos una vez que confirmamos el pedido por WhatsApp."},
+  {q:"¿Hacen envíos? ¿A qué zonas?",a:"Sí, realizamos envíos a todo el país. Para AMBA el envío es coordinado directamente y en muchos casos el mismo día. Para el interior trabajamos con correo o transporte, dependiendo del volumen y la zona."},
+  {q:"¿Los precios del catálogo son finales?",a:"Los precios que ves son de referencia y pueden variar por actualización de costos o disponibilidad de stock. Confirmamos el precio exacto al momento de cerrar el pedido por WhatsApp."},
+  {q:"¿Los productos son originales?",a:"Sí, trabajamos únicamente con distribuidores autorizados. Todos los productos cuentan con garantía del fabricante y documentación correspondiente."},
+  {q:"¿Puedo pedir factura?",a:"Sí, emitimos factura A o B según corresponda. Avisanos al momento de hacer el pedido e indicanos tu CUIT y condición frente al IVA."},
+  {q:"¿Tienen stock disponible de todos los productos?",a:"La mayoría de los productos que aparecen en el catálogo los tenemos en stock habitual. Para productos específicos o en grandes cantidades, confirmar disponibilidad por WhatsApp antes de cerrar el pedido."},
+  {q:"¿Tienen lista de precios para clínicas o compras por volumen?",a:"Sí, para clínicas, centros de salud o compras de alto volumen tenemos precios especiales. Consultanos directamente por WhatsApp con el detalle de lo que necesitás."},
+];
 
-function renderGrid(products){
-  const grid = document.getElementById("product-grid");
-  const label = document.getElementById("result-label");
-  label.textContent = `${products.length} producto${products.length!==1?"s":""} encontrado${products.length!==1?"s":""}`;
-  grid.innerHTML = products.map(p=>`
-    <div class="card">
-      <div class="card-img">
-        <i class="ti ${p.icon}"></i>
-        <span class="cat-tag">${catLabel(p.cat)}</span>
-      </div>
-      <div class="card-body">
-        <h3>${p.name}</h3>
-        <p class="desc">${p.desc}</p>
-        <div class="card-footer">
-          <span class="price">$${p.price.toLocaleString("es-AR")}</span>
-          <button class="add-btn" onclick="addToCart(${p.id})"><i class="ti ti-plus"></i> Agregar</button>
-        </div>
+/* ═══ STATE ═══ */
+let cart = [];
+let activeFilter = "todos";
+let currentDetailId = null;
+let prevPage = "tienda";
+let tCurrent = 0;
+
+/* ═══ NAVIGATION ═══ */
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  const el = document.getElementById('page-'+page);
+  if(el) el.classList.add('active');
+  const navEl = document.getElementById('nav-'+page);
+  if(navEl) navEl.classList.add('active');
+  window.scrollTo(0,0);
+  if(page==='tienda') filterProducts();
+  if(page==='faq') renderFaq();
+}
+
+function goBackFromDetail(){
+  showPage(prevPage||'tienda');
+}
+
+function toggleMobileMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMobileMenu(){
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+/* ═══ TOAST ═══ */
+function showToast(msg,type='success'){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast '+type+' show';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* ═══ PRODUCTS ═══ */
+function catLabel(c){
+  return {material:'Material',instrumental:'Instrumental',descartable:'Descartable',proteccion:'Protección',endodoncia:'Endodoncia',ortodoncia:'Ortodoncia'}[c]||c;
+}
+
+function prodCardHTML(p,small=false){
+  const badge = p.badge ? `<div class="prod-badge ${p.badge}">${p.badge==='oferta'?'OFERTA':'NUEVO'}</div>` : '';
+  const oldPrice = p.oldPrice ? `<span class="old">$${p.oldPrice.toLocaleString('es-AR')}</span>` : '';
+  return `
+  <div class="prod-card" onclick="openDetail(${p.id})">
+    ${badge}
+    <div class="prod-img"><i class="ti ${p.icon}"></i></div>
+    <div class="prod-body">
+      <div class="prod-cat-tag">${catLabel(p.cat)}</div>
+      <h3>${p.name}</h3>
+      <p class="prod-desc">${p.desc}</p>
+      <div class="prod-footer">
+        <div class="prod-price">${oldPrice}<span class="current">$${p.price.toLocaleString('es-AR')}</span></div>
+        <button class="add-btn" onclick="event.stopPropagation();addToCart(${p.id},1)"><i class="ti ti-plus"></i> Agregar</button>
       </div>
     </div>
-  `).join("");
+  </div>`;
 }
 
-function catLabel(c){
-  return {material:"Material",instrumental:"Instrumental",descartable:"Descartable",proteccion:"Protección"}[c]||c;
-}
-
-function setFilter(cat, btn){
-  activeFilter = cat;
-  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  filterProducts();
+function renderGrid(products, containerId){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  if(products.length===0){el.innerHTML='<p style="color:var(--muted);grid-column:1/-1;padding:2rem 0;">No se encontraron productos para tu búsqueda.</p>';return;}
+  el.innerHTML = products.map(p=>prodCardHTML(p)).join('');
 }
 
 function filterProducts(){
-  const q = document.getElementById("search-input").value.toLowerCase();
+  const q = (document.getElementById('searchInput')||{}).value||'';
+  const search = q.toLowerCase();
   let list = PRODUCTS;
-  if(activeFilter!=="todos") list = list.filter(p=>p.cat===activeFilter);
-  if(q) list = list.filter(p=>p.name.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q));
-  renderGrid(list);
+  if(activeFilter!=='todos') list = list.filter(p=>p.cat===activeFilter);
+  if(search) list = list.filter(p=>p.name.toLowerCase().includes(search)||p.desc.toLowerCase().includes(search)||(p.marca||'').toLowerCase().includes(search));
+  const label = document.getElementById('resultLabel');
+  if(label) label.textContent = `${list.length} producto${list.length!==1?'s':''} encontrado${list.length!==1?'s':''}`;
+  renderGrid(list,'productGrid');
 }
 
-function addToCart(id){
-  cart[id] = (cart[id]||0)+1;
+function setFilter(cat,btn){
+  activeFilter=cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  filterProducts();
+}
+
+function setFilterMobile(val){
+  activeFilter=val;
+  filterProducts();
+}
+
+/* ═══ DETAIL ═══ */
+function openDetail(id){
+  prevPage = document.querySelector('.page.active')?.id?.replace('page-','')||'tienda';
+  currentDetailId = id;
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+  let specs='';
+  if(p.specs) Object.entries(p.specs).forEach(([k,v])=>{specs+=`<div class="spec-row"><span class="label">${k}</span><span class="val">${v}</span></div>`;});
+  const oldP = p.oldPrice ? `<span class="old">$${p.oldPrice.toLocaleString('es-AR')}</span>` : '';
+  const saving = p.oldPrice ? `<span class="saving">Ahorrás $${(p.oldPrice-p.price).toLocaleString('es-AR')}</span>` : '';
+  document.getElementById('detailContent').innerHTML = `
+  <div class="detail-img-col">
+    <div class="detail-img-box"><i class="ti ${p.icon}" style="font-size:110px;color:var(--navy);opacity:.75"></i></div>
+    <div class="detail-thumbs">
+      <div class="detail-thumb active"><i class="ti ${p.icon}"></i></div>
+      <div class="detail-thumb"><i class="ti ti-package"></i></div>
+      <div class="detail-thumb"><i class="ti ti-certificate"></i></div>
+    </div>
+  </div>
+  <div class="detail-info-col">
+    <div class="detail-cat-tag">${catLabel(p.cat)} · ${p.marca||''}</div>
+    <h1 class="detail-title">${p.name}</h1>
+    <div class="detail-stars"><span class="stars">★★★★★</span><span>4.8 (24 reseñas)</span></div>
+    <div class="detail-price-box">
+      <div class="detail-price">${oldP}<div class="current">$${p.price.toLocaleString('es-AR')}</div>${saving}</div>
+    </div>
+    <div class="detail-qty-row">
+      <div class="qty-ctrl">
+        <button class="qty-btn-sm" onclick="changeDetailQty(-1)">−</button>
+        <span class="qty-val" id="detailQty">1</span>
+        <button class="qty-btn-sm" onclick="changeDetailQty(1)">+</button>
+      </div>
+      <button class="btn-add-detail" onclick="addToCartFromDetail(${p.id})"><i class="ti ti-shopping-cart"></i> Agregar al pedido</button>
+    </div>
+    <div class="detail-desc"><h4>Descripción</h4><p>${p.desc} Producto original con garantía de fabricante. Para consultas de stock o pedidos grandes, consultanos directamente por WhatsApp.</p></div>
+    ${specs ? `<div class="detail-specs"><h4>Especificaciones</h4>${specs}</div>` : ''}
+  </div>`;
+
+  // Related
+  const related = PRODUCTS.filter(x=>x.cat===p.cat&&x.id!==p.id).slice(0,6);
+  const rc = document.getElementById('relatedCarousel');
+  rc.innerHTML = related.map(r=>`
+    <div class="prod-card" style="min-width:200px;flex:0 0 200px;" onclick="openDetail(${r.id})">
+      <div class="prod-img" style="height:110px;"><i class="ti ${r.icon}" style="font-size:44px;"></i></div>
+      <div class="prod-body" style="padding:10px;">
+        <h3 style="font-size:.82rem;">${r.name}</h3>
+        <div class="prod-footer" style="margin-top:8px;">
+          <span class="current" style="font-size:.95rem;font-weight:700;color:var(--navy);">$${r.price.toLocaleString('es-AR')}</span>
+          <button class="add-btn" style="padding:6px 10px;font-size:.75rem;" onclick="event.stopPropagation();addToCart(${r.id},1)"><i class="ti ti-plus"></i></button>
+        </div>
+      </div>
+    </div>`).join('');
+
+  showPage('producto');
+}
+
+let detailQty = 1;
+function changeDetailQty(d){
+  detailQty = Math.max(1, detailQty+d);
+  const el = document.getElementById('detailQty');
+  if(el) el.textContent = detailQty;
+}
+function addToCartFromDetail(id){
+  addToCart(id, detailQty);
+  detailQty=1;
+  const el=document.getElementById('detailQty');
+  if(el) el.textContent='1';
+}
+
+/* ═══ CART ═══ */
+function addToCart(id,qty=1){
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+  const existing = cart.find(i=>i.id===id);
+  if(existing) existing.qty += qty;
+  else cart.push({id,name:p.name,price:p.price,icon:p.icon,qty});
   updateCartUI();
-  const panel = document.getElementById("cart-panel");
-  if(!panel.classList.contains("open")) flashBadge();
-}
-
-function flashBadge(){
-  const badge = document.getElementById("cart-count");
-  badge.style.transform="scale(1.5)";
-  setTimeout(()=>badge.style.transform="",200);
+  showToast(`${p.name.substring(0,28)}... agregado al carrito ✓`,'success');
+  const badge = document.getElementById('cartCount');
+  badge.classList.remove('pop');
+  void badge.offsetWidth;
+  badge.classList.add('pop');
 }
 
 function removeFromCart(id){
-  if(!cart[id]) return;
-  cart[id]--;
-  if(cart[id]<=0) delete cart[id];
+  cart = cart.filter(i=>i.id!==id);
   updateCartUI();
 }
 
-function updateCartUI(){
-  const total = Object.keys(cart).reduce((s,id)=>s+cart[id],0);
-  document.getElementById("cart-count").textContent=total;
-  renderCartItems();
+function changeQty(id,d){
+  const item = cart.find(i=>i.id===id);
+  if(!item) return;
+  item.qty = Math.max(1,item.qty+d);
+  updateCartUI();
 }
 
-function renderCartItems(){
-  const el = document.getElementById("cart-items");
-  const keys = Object.keys(cart);
-  if(keys.length===0){
-    el.innerHTML='<div class="cart-empty"><i class="ti ti-basket"></i>Aún no agregaste productos</div>';
-    document.getElementById("cart-total").textContent="$0";
+function clearCart(){
+  if(cart.length===0) return;
+  cart=[];
+  updateCartUI();
+  showToast('Carrito vaciado','warning');
+}
+
+function updateCartUI(){
+  const total = cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cartCount').textContent = total;
+  const wrap = document.getElementById('cartItems');
+  const footer = document.getElementById('cartFooter');
+  if(cart.length===0){
+    wrap.innerHTML='<div class="cart-empty-state"><i class="ti ti-basket"></i><p>Tu carrito está vacío.<br>¡Agregá productos para armar tu pedido!</p></div>';
+    footer.style.display='none';
     return;
   }
+  footer.style.display='block';
   let subtotal=0;
-  el.innerHTML=keys.map(id=>{
-    const p=PRODUCTS.find(x=>x.id==id);
-    const line=p.price*cart[id];
+  wrap.innerHTML=cart.map(item=>{
+    const line=item.price*item.qty;
     subtotal+=line;
     return `<div class="cart-item">
-      <div class="ci-icon"><i class="ti ${p.icon}"></i></div>
+      <div class="ci-thumb"><i class="ti ${item.icon}"></i></div>
       <div class="ci-info">
-        <h4>${p.name}</h4>
-        <span class="ci-price">$${line.toLocaleString("es-AR")}</span>
+        <h4>${item.name}</h4>
+        <span class="ci-price">$${line.toLocaleString('es-AR')}</span>
       </div>
-      <div class="ci-qty">
-        <button class="qty-btn" onclick="removeFromCart(${id})">−</button>
-        <span class="qty-num">${cart[id]}</span>
-        <button class="qty-btn" onclick="addToCart(${id})">+</button>
+      <div class="ci-qty-ctrl">
+        <button class="ci-qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+        <span class="ci-qty-num">${item.qty}</span>
+        <button class="ci-qty-btn" onclick="changeQty(${item.id},1)">+</button>
       </div>
+      <button class="cart-remove" onclick="removeFromCart(${item.id})" title="Eliminar"><i class="ti ti-x"></i></button>
     </div>`;
-  }).join("");
-  document.getElementById("cart-total").textContent="$"+subtotal.toLocaleString("es-AR");
+  }).join('');
+  document.getElementById('cartTotal').textContent='$'+subtotal.toLocaleString('es-AR');
 }
 
-function openCart(){
-  document.getElementById("cart-panel").classList.add("open");
-  document.getElementById("overlay").classList.add("open");
-}
-function closeCart(){
-  document.getElementById("cart-panel").classList.remove("open");
-  document.getElementById("overlay").classList.remove("open");
+function toggleCart(){
+  document.getElementById('cartSidebar').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
 }
 
 function sendWhatsApp(){
-  const keys=Object.keys(cart);
-  if(keys.length===0){alert("Tu pedido está vacío. Agregá productos primero.");return;}
-  let msg="🦷 *Pedido DentiBox*\n\n";
+  if(cart.length===0){showToast('Tu carrito está vacío','warning');return;}
+  let msg='🦷 *Pedido DentiBox*\n\n';
   let total=0;
-  keys.forEach(id=>{
-    const p=PRODUCTS.find(x=>x.id==id);
-    const line=p.price*cart[id];
+  cart.forEach(item=>{
+    const line=item.price*item.qty;
     total+=line;
-    msg+=`• ${p.name} x${cart[id]} → $${line.toLocaleString("es-AR")}\n`;
+    msg+=`• ${item.name} x${item.qty} → $${line.toLocaleString('es-AR')}\n`;
   });
-  msg+=`\n*Total estimado: $${total.toLocaleString("es-AR")}*`;
-  msg+="\n\n_Por favor confirmen disponibilidad y coordinen la entrega. ¡Gracias!_";
-  const url=`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
-  window.open(url,"_blank");
+  msg+=`\n*Total estimado: $${total.toLocaleString('es-AR')}*`;
+  msg+='\n\n_Por favor confirmen disponibilidad y coordinen la entrega. ¡Gracias!_';
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
-renderGrid(PRODUCTS);
+/* ═══ FAQ ═══ */
+function renderFaq(){
+  const el=document.getElementById('faqList');
+  if(!el||el.children.length>0) return;
+  el.innerHTML=FAQS.map((f,i)=>`
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(${i},this)">${f.q}<i class="ti ti-chevron-down"></i></button>
+    <div class="faq-a" id="faq-a-${i}"><div class="faq-a-inner">${f.a}</div></div>
+  </div>`).join('');
+}
+function toggleFaq(i,btn){
+  const a=document.getElementById('faq-a-'+i);
+  const isOpen=a.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(x=>x.classList.remove('open'));
+  document.querySelectorAll('.faq-q').forEach(x=>x.classList.remove('open'));
+  if(!isOpen){a.classList.add('open');btn.classList.add('open');}
+}
+
+/* ═══ TESTIMONIALS ═══ */
+function initTestimonials(){
+  const cards=document.querySelectorAll('.t-card');
+  const dots=document.getElementById('tDots');
+  if(!dots) return;
+  dots.innerHTML=[...cards].map((_,i)=>`<button class="t-dot${i===0?' active':''}" onclick="goToSlide(${i})"></button>`).join('');
+  setInterval(()=>goToSlide((tCurrent+1)%cards.length),5000);
+}
+function goToSlide(n){
+  const cards=document.querySelectorAll('.t-card');
+  tCurrent=n;
+  document.getElementById('tTrack').style.transform=`translateX(-${n*100}%)`;
+  document.querySelectorAll('.t-dot').forEach((d,i)=>d.classList.toggle('active',i===n));
+}
+
+/* ═══ FEATURED ═══ */
+function renderFeatured(){
+  const feat=PRODUCTS.filter(p=>p.featured).slice(0,4);
+  renderGrid(feat,'featured-grid');
+}
+
+/* ═══ INIT ═══ */
+renderFeatured();
+initTestimonials();
+filterProducts();
 </script>
 </body>
 </html>
