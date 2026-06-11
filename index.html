@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DentiBox</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:#F5F7FA;color:#1a2340;}
+
+/* NAV */
+nav{background:#fff;border-bottom:1.5px solid #E2E8F0;position:sticky;top:0;z-index:100;padding:0 2rem;}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;}
+.logo-wrap{display:flex;align-items:center;gap:10px;}
+.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,#29ABE2,#2D2E8F);border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.logo-icon i{color:#fff;font-size:20px;}
+.logo-text{font-size:1.35rem;font-weight:700;color:#2D2E8F;letter-spacing:-0.5px;}
+.logo-sub{font-size:0.72rem;color:#29ABE2;font-weight:500;letter-spacing:0.5px;display:block;margin-top:-3px;}
+.nav-right{display:flex;align-items:center;gap:1rem;}
+.cart-btn{background:#2D2E8F;color:#fff;border:none;border-radius:10px;padding:8px 18px;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s;}
+.cart-btn:hover{background:#1e1f6b;}
+.cart-badge{background:#29ABE2;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#2D2E8F 0%,#1a1b5e 60%,#0d1033 100%);color:#fff;padding:3.5rem 2rem 3rem;}
+.hero-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:2rem;}
+.hero-text h1{font-size:2.1rem;font-weight:700;line-height:1.2;margin-bottom:0.8rem;}
+.hero-text h1 span{color:#29ABE2;}
+.hero-text p{font-size:1rem;color:rgba(255,255,255,0.75);max-width:440px;line-height:1.6;}
+.hero-badges{display:flex;gap:10px;margin-top:1.5rem;flex-wrap:wrap;}
+.badge{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:6px 14px;font-size:0.8rem;display:flex;align-items:center;gap:6px;}
+.badge i{color:#29ABE2;font-size:15px;}
+.hero-img{width:180px;height:180px;background:rgba(41,171,226,0.15);border-radius:24px;border:2px solid rgba(41,171,226,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hero-img i{font-size:80px;color:#29ABE2;}
+
+/* SEARCH & FILTER */
+.toolbar{max-width:1100px;margin:2rem auto 0;padding:0 2rem;}
+.toolbar-inner{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+.search-wrap{flex:1;min-width:220px;position:relative;}
+.search-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#8898b0;font-size:18px;}
+.search-wrap input{width:100%;padding:10px 14px 10px 38px;border:1.5px solid #E2E8F0;border-radius:10px;font-size:0.95rem;font-family:inherit;background:#fff;outline:none;transition:border 0.2s;}
+.search-wrap input:focus{border-color:#29ABE2;}
+.filter-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.filter-btn{background:#fff;border:1.5px solid #E2E8F0;border-radius:8px;padding:8px 16px;font-size:0.85rem;font-family:inherit;cursor:pointer;color:#4a5568;font-weight:500;transition:all 0.2s;}
+.filter-btn.active,.filter-btn:hover{background:#2D2E8F;color:#fff;border-color:#2D2E8F;}
+
+/* GRID */
+.catalog{max-width:1100px;margin:1.5rem auto 3rem;padding:0 2rem;}
+.catalog h2{font-size:1.1rem;font-weight:600;color:#4a5568;margin-bottom:1rem;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.25rem;}
+.card{background:#fff;border:1.5px solid #E2E8F0;border-radius:14px;overflow:hidden;transition:box-shadow 0.2s,transform 0.2s;cursor:default;}
+.card:hover{box-shadow:0 6px 24px rgba(45,46,143,0.1);transform:translateY(-2px);}
+.card-img{background:linear-gradient(135deg,#EEF2FF,#E0F4FF);height:140px;display:flex;align-items:center;justify-content:center;position:relative;}
+.card-img i{font-size:56px;color:#2D2E8F;opacity:0.85;}
+.cat-tag{position:absolute;top:8px;right:8px;background:rgba(41,171,226,0.15);color:#1a6fa3;font-size:0.7rem;font-weight:600;padding:3px 8px;border-radius:6px;}
+.card-body{padding:14px;}
+.card-body h3{font-size:0.92rem;font-weight:600;color:#1a2340;margin-bottom:4px;line-height:1.3;}
+.card-body .desc{font-size:0.78rem;color:#8898b0;margin-bottom:10px;line-height:1.4;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;}
+.price{font-size:1.05rem;font-weight:700;color:#2D2E8F;}
+.add-btn{background:#2D2E8F;color:#fff;border:none;border-radius:8px;padding:7px 13px;font-size:0.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background 0.2s;}
+.add-btn:hover{background:#29ABE2;}
+
+/* CART PANEL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;}
+.overlay.open{display:block;}
+.cart-panel{position:fixed;right:0;top:0;height:100%;width:380px;max-width:95vw;background:#fff;z-index:201;transform:translateX(100%);transition:transform 0.3s ease;display:flex;flex-direction:column;}
+.cart-panel.open{transform:translateX(0);}
+.cart-header{padding:1.25rem 1.5rem;border-bottom:1.5px solid #E2E8F0;display:flex;align-items:center;justify-content:space-between;}
+.cart-header h2{font-size:1.1rem;font-weight:700;color:#2D2E8F;}
+.close-btn{background:none;border:none;cursor:pointer;color:#8898b0;font-size:22px;display:flex;}
+.cart-items{flex:1;overflow-y:auto;padding:1rem 1.5rem;}
+.cart-empty{text-align:center;padding:3rem 1rem;color:#b0bec5;}
+.cart-empty i{font-size:48px;display:block;margin-bottom:1rem;}
+.cart-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #F0F4F8;}
+.ci-icon{width:44px;height:44px;background:#EEF2FF;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ci-icon i{font-size:22px;color:#2D2E8F;}
+.ci-info{flex:1;}
+.ci-info h4{font-size:0.85rem;font-weight:600;color:#1a2340;margin-bottom:2px;}
+.ci-info .ci-price{font-size:0.82rem;color:#29ABE2;font-weight:600;}
+.ci-qty{display:flex;align-items:center;gap:6px;}
+.qty-btn{background:#F0F4F8;border:none;border-radius:6px;width:26px;height:26px;cursor:pointer;font-size:1rem;font-weight:700;color:#2D2E8F;display:flex;align-items:center;justify-content:center;}
+.qty-btn:hover{background:#2D2E8F;color:#fff;}
+.qty-num{font-size:0.9rem;font-weight:600;min-width:20px;text-align:center;}
+.cart-footer{padding:1.25rem 1.5rem;border-top:1.5px solid #E2E8F0;}
+.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.cart-total span{font-size:0.9rem;color:#4a5568;}
+.cart-total strong{font-size:1.2rem;font-weight:700;color:#2D2E8F;}
+.wa-btn{width:100%;background:#25D366;color:#fff;border:none;border-radius:12px;padding:14px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:background 0.2s;}
+.wa-btn:hover{background:#1ebe5b;}
+.wa-note{font-size:0.75rem;color:#8898b0;text-align:center;margin-top:8px;}
+
+/* FOOTER */
+footer{background:#1a2340;color:rgba(255,255,255,0.6);text-align:center;padding:1.5rem 2rem;font-size:0.82rem;}
+footer strong{color:#fff;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo-wrap">
+      <div class="logo-icon"><i class="ti ti-tooth"></i></div>
+      <div>
+        <span class="logo-text">DentiBox</span>
+        <span class="logo-sub">INSUMOS ODONTOLÓGICOS</span>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="cart-btn" onclick="openCart()">
+        <i class="ti ti-shopping-cart"></i> Mi pedido
+        <span class="cart-badge" id="cart-count">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1>Insumos dentales,<br><span>directo a tu clínica</span></h1>
+      <p>Todos los materiales que tu consultorio necesita. Hacé tu pedido online y coordinamos la entrega por WhatsApp o llamada.</p>
+      <div class="hero-badges">
+        <span class="badge"><i class="ti ti-brand-whatsapp"></i> Pedidos por WhatsApp</span>
+        <span class="badge"><i class="ti ti-truck-delivery"></i> Envíos rápidos</span>
+        <span class="badge"><i class="ti ti-shield-check"></i> Productos originales</span>
+      </div>
+    </div>
+    <div class="hero-img"><i class="ti ti-tooth"></i></div>
+  </div>
+</div>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input type="text" id="search-input" placeholder="Buscar productos..." oninput="filterProducts()"/>
+    </div>
+    <div class="filter-btns">
+      <button class="filter-btn active" onclick="setFilter('todos',this)">Todos</button>
+      <button class="filter-btn" onclick="setFilter('material',this)">Materiales</button>
+      <button class="filter-btn" onclick="setFilter('instrumental',this)">Instrumental</button>
+      <button class="filter-btn" onclick="setFilter('descartable',this)">Descartables</button>
+      <button class="filter-btn" onclick="setFilter('proteccion',this)">Protección</button>
+    </div>
+  </div>
+</div>
+
+<div class="catalog">
+  <h2 id="result-label">Todos los productos</h2>
+  <div class="grid" id="product-grid"></div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-header">
+    <h2><i class="ti ti-shopping-cart" style="margin-right:6px"></i>Mi pedido</h2>
+    <button class="close-btn" onclick="closeCart()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty"><i class="ti ti-basket"></i>Aún no agregaste productos</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total"><span>Total estimado</span><strong id="cart-total">$0</strong></div>
+    <button class="wa-btn" onclick="sendWhatsApp()">
+      <i class="ti ti-brand-whatsapp" style="font-size:22px"></i> Enviar pedido por WhatsApp
+    </button>
+    <p class="wa-note">Te contactaremos para confirmar disponibilidad y coordinar entrega</p>
+  </div>
+</div>
+
+<footer>
+  <strong>DentiBox</strong> · Insumos Odontológicos · Pedidos por WhatsApp o llamada
+</footer>
+
+<script>
+const WA_NUMBER = "5491100000000";
+
+const PRODUCTS = [
+  {id:1,name:"Composite Filtek Z350",desc:"Resina compuesta nanofilled, kit 8 jeringas",price:28500,cat:"material",icon:"ti-droplet"},
+  {id:2,name:"Cemento de ionómero",desc:"Fuji IX GP Extra, polvo + líquido 15g",price:12800,cat:"material",icon:"ti-flask"},
+  {id:3,name:"Hidróxido de calcio",desc:"Dycal, base + catalizador, 13.5ml",price:6400,cat:"material",icon:"ti-test-pipe"},
+  {id:4,name:"Alginato cromotrópico",desc:"Jeltrate, bolsa 1kg, fraguado rápido",price:9200,cat:"material",icon:"ti-droplet-half"},
+  {id:5,name:"Anestesia Articaína 4%",desc:"Con epinefrina 1:100.000, caja x50 carpules",price:18600,cat:"material",icon:"ti-injection"},
+  {id:6,name:"Brackets metálicos Roth",desc:"Kit completo 022, 5 piezas + molares",price:22000,cat:"instrumental",icon:"ti-align-center"},
+  {id:7,name:"Fresas de diamante",desc:"Set 10 unidades, grano fino y medio",price:8500,cat:"instrumental",icon:"ti-tool"},
+  {id:8,name:"Espejos bucales nº5",desc:"Sin mango, caja x12, acero inoxidable",price:4200,cat:"instrumental",icon:"ti-circle"},
+  {id:9,name:"Sonda periodontal",desc:"OMS, marcas negras, mango hexagonal",price:3800,cat:"instrumental",icon:"ti-line"},
+  {id:10,name:"Guantes de nitrilo S",desc:"Caja x100, sin polvo, talla S",price:5600,cat:"descartable",icon:"ti-hand-stop"},
+  {id:11,name:"Guantes de nitrilo M",desc:"Caja x100, sin polvo, talla M",price:5600,cat:"descartable",icon:"ti-hand-stop"},
+  {id:12,name:"Baberos descartables",desc:"Papel + polietileno, paquete x100",price:3100,cat:"descartable",icon:"ti-file"},
+  {id:13,name:"Vasos descartables",desc:"200ml, paquete x100 unidades",price:1800,cat:"descartable",icon:"ti-cup"},
+  {id:14,name:"Barbijos quirúrgicos",desc:"Tricapa, caja x50, certificado",price:4400,cat:"proteccion",icon:"ti-mask"},
+  {id:15,name:"Antiparras de seguridad",desc:"Policarbonato, ventilación lateral, x1",price:3200,cat:"proteccion",icon:"ti-eyeglass"},
+  {id:16,name:"Camisolín descartable",desc:"PP 35g, manga larga, talla única x10",price:7800,cat:"proteccion",icon:"ti-shirt"},
+];
+
+let cart = {};
+let activeFilter = "todos";
+
+function renderGrid(products){
+  const grid = document.getElementById("product-grid");
+  const label = document.getElementById("result-label");
+  label.textContent = `${products.length} producto${products.length!==1?"s":""} encontrado${products.length!==1?"s":""}`;
+  grid.innerHTML = products.map(p=>`
+    <div class="card">
+      <div class="card-img">
+        <i class="ti ${p.icon}"></i>
+        <span class="cat-tag">${catLabel(p.cat)}</span>
+      </div>
+      <div class="card-body">
+        <h3>${p.name}</h3>
+        <p class="desc">${p.desc}</p>
+        <div class="card-footer">
+          <span class="price">$${p.price.toLocaleString("es-AR")}</span>
+          <button class="add-btn" onclick="addToCart(${p.id})"><i class="ti ti-plus"></i> Agregar</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+function catLabel(c){
+  return {material:"Material",instrumental:"Instrumental",descartable:"Descartable",proteccion:"Protección"}[c]||c;
+}
+
+function setFilter(cat, btn){
+  activeFilter = cat;
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  filterProducts();
+}
+
+function filterProducts(){
+  const q = document.getElementById("search-input").value.toLowerCase();
+  let list = PRODUCTS;
+  if(activeFilter!=="todos") list = list.filter(p=>p.cat===activeFilter);
+  if(q) list = list.filter(p=>p.name.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q));
+  renderGrid(list);
+}
+
+function addToCart(id){
+  cart[id] = (cart[id]||0)+1;
+  updateCartUI();
+  const panel = document.getElementById("cart-panel");
+  if(!panel.classList.contains("open")) flashBadge();
+}
+
+function flashBadge(){
+  const badge = document.getElementById("cart-count");
+  badge.style.transform="scale(1.5)";
+  setTimeout(()=>badge.style.transform="",200);
+}
+
+function removeFromCart(id){
+  if(!cart[id]) return;
+  cart[id]--;
+  if(cart[id]<=0) delete cart[id];
+  updateCartUI();
+}
+
+function updateCartUI(){
+  const total = Object.keys(cart).reduce((s,id)=>s+cart[id],0);
+  document.getElementById("cart-count").textContent=total;
+  renderCartItems();
+}
+
+function renderCartItems(){
+  const el = document.getElementById("cart-items");
+  const keys = Object.keys(cart);
+  if(keys.length===0){
+    el.innerHTML='<div class="cart-empty"><i class="ti ti-basket"></i>Aún no agregaste productos</div>';
+    document.getElementById("cart-total").textContent="$0";
+    return;
+  }
+  let subtotal=0;
+  el.innerHTML=keys.map(id=>{
+    const p=PRODUCTS.find(x=>x.id==id);
+    const line=p.price*cart[id];
+    subtotal+=line;
+    return `<div class="cart-item">
+      <div class="ci-icon"><i class="ti ${p.icon}"></i></div>
+      <div class="ci-info">
+        <h4>${p.name}</h4>
+        <span class="ci-price">$${line.toLocaleString("es-AR")}</span>
+      </div>
+      <div class="ci-qty">
+        <button class="qty-btn" onclick="removeFromCart(${id})">−</button>
+        <span class="qty-num">${cart[id]}</span>
+        <button class="qty-btn" onclick="addToCart(${id})">+</button>
+      </div>
+    </div>`;
+  }).join("");
+  document.getElementById("cart-total").textContent="$"+subtotal.toLocaleString("es-AR");
+}
+
+function openCart(){
+  document.getElementById("cart-panel").classList.add("open");
+  document.getElementById("overlay").classList.add("open");
+}
+function closeCart(){
+  document.getElementById("cart-panel").classList.remove("open");
+  document.getElementById("overlay").classList.remove("open");
+}
+
+function sendWhatsApp(){
+  const keys=Object.keys(cart);
+  if(keys.length===0){alert("Tu pedido está vacío. Agregá productos primero.");return;}
+  let msg="🦷 *Pedido DentiBox*\n\n";
+  let total=0;
+  keys.forEach(id=>{
+    const p=PRODUCTS.find(x=>x.id==id);
+    const line=p.price*cart[id];
+    total+=line;
+    msg+=`• ${p.name} x${cart[id]} → $${line.toLocaleString("es-AR")}\n`;
+  });
+  msg+=`\n*Total estimado: $${total.toLocaleString("es-AR")}*`;
+  msg+="\n\n_Por favor confirmen disponibilidad y coordinen la entrega. ¡Gracias!_";
+  const url=`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+  window.open(url,"_blank");
+}
+
+renderGrid(PRODUCTS);
+</script>
+</body>
+</html>
