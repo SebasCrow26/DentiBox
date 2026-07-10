@@ -519,7 +519,7 @@ tr:last-child td{border-bottom:none;}
 @media (max-width:480px){
   .footer-inner{padding-left:16px;padding-right:16px;}
   .footer-socials{justify-content:center;gap:14px;}
-  .footer-socials .btn-social{width:64px;height:64px;padding:0;border-radius:50%;justify-content:center;align-items:center;display:inline-flex;background:rgba(255,255,255,0.98);box-shadow:0 10px 30px rgba(18,34,77,0.06);border:1px solid rgba(0,0,0,0.03);} 
+  .footer-socials .btn-social{width:64px;height:64px;padding:0;border-radius:50%;justify-content:center;align-items:center;display:inline-flex;border:1px solid rgba(0,0,0,0.03);} 
   .footer-socials .btn-social img{width:32px;height:32px;object-fit:contain;}
   .footer-socials .btn-social .social-label{display:none;font-size:0;line-height:0;}
 
