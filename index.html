@@ -239,10 +239,10 @@
     <div class="admin-form-card" id="cuentaPerfilCard" style="display:none;">
       <h3 id="cuentaPerfilTitulo">Completa tu perfil</h3>
       <p class="form-hint" id="cuentaPerfilSubtitulo" style="margin-bottom:var(--space-4);">Necesitamos estos datos para poder entregarte los pedidos.</p>
-      <div class="form-group"><label>Nombre completo</label><input type="text" id="cuentaNombre" placeholder="Dra. Nombre Apellido"></div>
-      <div class="form-group"><label>Teléfono</label><input type="text" id="cuentaTelefono" placeholder="300 123 4567"></div>
-      <div class="form-group"><label>Consultorio (opcional)</label><input type="text" id="cuentaConsultorio" placeholder="Nombre del consultorio"></div>
-      <div class="form-group"><label>Dirección de entrega</label><input type="text" id="cuentaDireccion" placeholder="Dirección completa" oninput="actualizarVistaDireccion()"></div>
+      <div class="form-group"><label>Nombre completo</label><input type="text" id="cuentaNombre" placeholder="Dra. Nombre Apellido" oninput="guardarPerfilBorrador()"></div>
+      <div class="form-group"><label>Teléfono</label><input type="text" id="cuentaTelefono" placeholder="300 123 4567" oninput="guardarPerfilBorrador()"></div>
+      <div class="form-group"><label>Consultorio (opcional)</label><input type="text" id="cuentaConsultorio" placeholder="Nombre del consultorio" oninput="guardarPerfilBorrador()"></div>
+      <div class="form-group"><label>Dirección de entrega</label><input type="text" id="cuentaDireccion" placeholder="Dirección completa" oninput="guardarPerfilBorrador(); actualizarVistaDireccion()"></div>
       <div class="form-group">
         <label>Vista previa de la dirección</label>
         <div class="address-preview" id="cuentaDireccionPreview">

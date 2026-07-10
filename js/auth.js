@@ -122,6 +122,28 @@ function cancelarEditarPerfilCliente() {
   renderCuentaPage();
 }
 
+function guardarPerfilBorrador() {
+  const nombre = document.getElementById('cuentaNombre')?.value || '';
+  const telefono = document.getElementById('cuentaTelefono')?.value || '';
+  const consultorio = document.getElementById('cuentaConsultorio')?.value || '';
+  const direccion = document.getElementById('cuentaDireccion')?.value || '';
+  const draft = { nombre, telefono, consultorio, direccion };
+  sessionStorage.setItem('dentibox.cuentaPerfilDraft', JSON.stringify(draft));
+}
+
+function leerPerfilBorrador() {
+  try {
+    const raw = sessionStorage.getItem('dentibox.cuentaPerfilDraft');
+    return raw ? JSON.parse(raw) : null;
+  } catch (err) {
+    return null;
+  }
+}
+
+function limpiarPerfilBorrador() {
+  sessionStorage.removeItem('dentibox.cuentaPerfilDraft');
+}
+
 function actualizarVistaDireccion() {
   const consultorio = document.getElementById('cuentaConsultorio')?.value.trim();
   const direccion = document.getElementById('cuentaDireccion')?.value.trim();
@@ -201,6 +223,7 @@ async function guardarPerfilCliente() {
   if (error) { msgEl.textContent = error.message; return; }
   msgEl.textContent = '';
   _clienteState.cliente = data;
+  limpiarPerfilBorrador();
   _clienteEditando = false;
   showToast('Perfil guardado', 'success');
   renderCuentaPage();
@@ -239,6 +262,13 @@ function renderCuentaPage() {
     } else {
       consultorioEl.value = '';
       direccionEl.value = savedDireccion;
+    }
+    const draft = leerPerfilBorrador();
+    if (draft) {
+      nombreEl.value = draft.nombre || nombreEl.value;
+      telefonoEl.value = draft.telefono || telefonoEl.value;
+      consultorioEl.value = draft.consultorio || consultorioEl.value;
+      direccionEl.value = draft.direccion || direccionEl.value;
     }
     actualizarVistaDireccion();
   }
