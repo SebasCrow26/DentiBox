@@ -16,6 +16,7 @@ async function initApp() {
   const { pageId, extra } = resolveRoute();
   goToPage(pageId, { extra, updateUrl: false });
   if (pageId === 'tienda' && extra) openDetail(extra, { updateUrl: false });
+  setupScrollAnimations();
 }
 
 if (window._sb) {
