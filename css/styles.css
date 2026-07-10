@@ -523,10 +523,7 @@ tr:last-child td{border-bottom:none;}
   .footer-socials .btn-social img{width:32px;height:32px;object-fit:contain;}
   .footer-socials .btn-social .social-label{display:none;font-size:0;line-height:0;}
 
-  /* Mobile: keep button shape but color the SVG pictograms by brand */
-  .footer-socials .btn-social.btn-instagram .social-icon *{fill:#E1306C !important;}
-  .footer-socials .btn-social.btn-facebook .social-icon *{fill:#1877F2 !important;}
-  .footer-socials .btn-social.btn-whatsapp .social-icon *{fill:#25D366 !important;}
+  /* Mobile: icons use the provided Cloudinary images; no SVG fill overrides needed */
 
   /* Ensure WA float doesn't overlap footer on small screens */
   .wa-float{bottom:100px;right:18px;}
