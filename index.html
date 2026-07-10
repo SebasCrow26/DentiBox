@@ -231,7 +231,7 @@
 
     <div class="admin-login-box" id="adminLoginBox">
       <h2>Acceso administrador</h2>
-      <p>Inicia sesión para gestionar el catálogo.</p>
+      <p>Inicia sesión para gestionar pedidos, clientes y productos.</p>
       <div class="form-group">
         <label>Correo</label>
         <input type="email" id="adminEmail" placeholder="tucorreo@dominio.com">
@@ -242,62 +242,181 @@
       </div>
       <button class="btn-primary btn-block" onclick="adminLogin()">Ingresar</button>
       <p class="form-hint" id="adminLoginMsg" style="margin-top:10px;"></p>
+      <p class="form-hint" style="margin-top:14px;">Modo demo: cualquier correo/contraseña te da acceso mientras conectamos Supabase.</p>
     </div>
 
     <div id="adminPanelWrap" style="display:none;">
       <div class="admin-header">
         <div>
-          <h1>Panel de productos</h1>
+          <h1>Panel de administración</h1>
           <p class="form-hint" id="adminUserEmail"></p>
         </div>
         <button class="btn-outline" onclick="adminLogout()"><i class="ti ti-logout"></i> Cerrar sesión</button>
       </div>
 
-      <div class="admin-form-card" id="adminFormCard">
-        <h3 id="productFormTitle">Agregar producto</h3>
-        <div class="form-row">
-          <div class="form-group"><label>Nombre</label><input type="text" id="pNombre"></div>
-          <div class="form-group"><label>Categoría</label>
-            <select id="pCategoria">
-              <option value="restauracion">Restauración</option>
-              <option value="ortodoncia">Ortodoncia</option>
-              <option value="bioseguridad">Bioseguridad</option>
-              <option value="instrumental">Instrumental</option>
-              <option value="endodoncia">Endodoncia</option>
-              <option value="consumibles">Consumibles</option>
-            </select>
+      <div class="demo-banner">
+        <i class="ti ti-info-circle"></i>
+        <span>Estás viendo datos de prueba en memoria (se reinician al recargar la página). Todo lo que hagas aquí se reemplaza por datos reales al conectar Supabase.</span>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchAdminTab('pedidos',this)">Pedidos</button>
+        <button class="admin-tab" onclick="switchAdminTab('clientes',this)">Clientes</button>
+        <button class="admin-tab" onclick="switchAdminTab('productos',this)">Productos</button>
+        <button class="admin-tab" onclick="switchAdminTab('promos',this)">Promociones</button>
+        <button class="admin-tab" onclick="switchAdminTab('analitica',this)">Analítica</button>
+      </div>
+
+      <!-- ===== TAB: PEDIDOS (cola en orden de llegada) ===== -->
+      <div class="admin-panel active" id="adminTab-pedidos">
+        <div class="admin-search">
+          <i class="ti ti-search"></i>
+          <input type="text" placeholder="Buscar pedido por nombre de cliente..." oninput="handleQueueSearch(this.value)">
+        </div>
+        <p class="form-hint" style="margin-bottom:var(--space-4);">Los pedidos se muestran en orden de llegada. Alístalos y márcalos como entregados a medida que salgas a repartir.</p>
+        <div class="queue-list" id="queueList"></div>
+      </div>
+
+      <!-- ===== TAB: CLIENTES (CRM) ===== -->
+      <div class="admin-panel" id="adminTab-clientes">
+        <div class="admin-form-card" id="clienteFormCard">
+          <h3 id="clienteFormTitle">Agregar cliente</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Nombre</label><input type="text" id="clNombre" placeholder="Dra. Nombre Apellido"></div>
+            <div class="form-group"><label>Teléfono</label><input type="text" id="clTelefono" placeholder="300 123 4567"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Email</label><input type="email" id="clEmail" placeholder="correo@consultorio.com"></div>
+            <div class="form-group"><label>Dirección</label><input type="text" id="clDireccion" placeholder="Consultorio, dirección completa"></div>
+          </div>
+          <div class="form-group">
+            <label>Foto de fachada del consultorio (link temporal)</label>
+            <input type="url" id="clFoto" placeholder="https://...">
+            <p class="form-hint">Por ahora es un link; con Supabase Storage esto será una subida de archivo real.</p>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:8px;">
+            <button class="btn-primary" onclick="saveCliente()" id="clienteFormSubmitBtn">Guardar cliente</button>
+            <button class="btn-outline" onclick="resetClienteForm()">Cancelar edición</button>
           </div>
         </div>
-        <div class="form-row">
-          <div class="form-group"><label>Precio</label><input type="number" id="pPrecio" placeholder="0"></div>
-          <div class="form-group"><label>Precio anterior (opcional, para ofertas)</label><input type="number" id="pPrecioAnterior" placeholder="0"></div>
+
+        <div class="admin-search">
+          <i class="ti ti-search"></i>
+          <input type="text" placeholder="Buscar cliente por nombre..." oninput="handleClientesSearch(this.value)">
         </div>
-        <div class="form-group">
-          <label>Link de la imagen</label>
-          <input type="url" id="pImagen" placeholder="https://...">
-          <p class="form-hint">Sube la imagen a Cloudinary, Imgur o similar y pega aquí el link. Este proyecto no almacena archivos, solo la URL.</p>
-        </div>
-        <div class="form-group"><label>Descripción</label><textarea id="pDescripcion" rows="3"></textarea></div>
-        <div class="form-row">
-          <label style="display:flex;align-items:center;gap:6px;font-size:0.83rem;"><input type="checkbox" id="pOferta" style="width:auto;"> Marcar como oferta</label>
-          <label style="display:flex;align-items:center;gap:6px;font-size:0.83rem;"><input type="checkbox" id="pNuevo" style="width:auto;"> Marcar como nuevo</label>
-          <label style="display:flex;align-items:center;gap:6px;font-size:0.83rem;"><input type="checkbox" id="pOculto" style="width:auto;"> Ocultar de la tienda</label>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:8px;">
-          <button class="btn-primary" onclick="saveProduct()" id="productFormSubmitBtn">Guardar producto</button>
-          <button class="btn-outline" onclick="resetProductForm()">Cancelar edición</button>
+        <div class="admin-table-wrap">
+          <table>
+            <thead><tr><th>Nombre</th><th>Teléfono</th><th>Email</th><th>Dirección</th><th>Pedidos</th><th>Acciones</th></tr></thead>
+            <tbody id="adminClientesBody"><tr class="loading-row"><td colspan="6">Cargando...</td></tr></tbody>
+          </table>
         </div>
       </div>
 
-      <div class="admin-table-wrap">
-        <table>
-          <thead><tr><th>Imagen</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead>
-          <tbody id="adminProductsBody"><tr class="loading-row"><td colspan="6">Cargando...</td></tr></tbody>
-        </table>
+      <!-- ===== TAB: PRODUCTOS ===== -->
+      <div class="admin-panel" id="adminTab-productos">
+        <div class="admin-form-card" id="adminFormCard">
+          <h3 id="productFormTitle">Agregar producto</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Nombre</label><input type="text" id="pNombre"></div>
+            <div class="form-group"><label>Categoría</label>
+              <select id="pCategoria">
+                <option value="restauracion">Restauración</option>
+                <option value="ortodoncia">Ortodoncia</option>
+                <option value="bioseguridad">Bioseguridad</option>
+                <option value="instrumental">Instrumental</option>
+                <option value="endodoncia">Endodoncia</option>
+                <option value="consumibles">Consumibles</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Precio</label><input type="number" id="pPrecio" placeholder="0"></div>
+            <div class="form-group"><label>Precio anterior (opcional, para ofertas)</label><input type="number" id="pPrecioAnterior" placeholder="0"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Stock disponible</label><input type="number" id="pStock" placeholder="0"></div>
+            <div class="form-group">
+              <label>Link de la imagen</label>
+              <input type="url" id="pImagen" placeholder="https://...">
+            </div>
+          </div>
+          <p class="form-hint" style="margin:-8px 0 12px;">Sube la imagen a Cloudinary, Imgur o similar y pega aquí el link. Este proyecto no almacena archivos de producto, solo la URL.</p>
+          <div class="form-group"><label>Descripción</label><textarea id="pDescripcion" rows="3"></textarea></div>
+          <div class="form-row">
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.83rem;"><input type="checkbox" id="pOferta" style="width:auto;"> Marcar como oferta</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.83rem;"><input type="checkbox" id="pNuevo" style="width:auto;"> Marcar como nuevo</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.83rem;"><input type="checkbox" id="pOculto" style="width:auto;"> Ocultar de la tienda</label>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:8px;">
+            <button class="btn-primary" onclick="saveProduct()" id="productFormSubmitBtn">Guardar producto</button>
+            <button class="btn-outline" onclick="resetProductForm()">Cancelar edición</button>
+          </div>
+        </div>
+
+        <div class="admin-table-wrap">
+          <table>
+            <thead><tr><th>Imagen</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="adminProductsBody"><tr class="loading-row"><td colspan="6">Cargando...</td></tr></tbody>
+          </table>
+        </div>
       </div>
+
+      <!-- ===== TAB: PROMOCIONES ===== -->
+      <div class="admin-panel" id="adminTab-promos">
+        <div class="admin-form-card" id="promoFormCard">
+          <h3 id="promoFormTitle">Nueva promoción</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Producto</label><select id="promoProducto"></select></div>
+            <div class="form-group"><label>Tipo</label>
+              <select id="promoTipo">
+                <option value="dia">Del día</option>
+                <option value="semana">Semanal</option>
+                <option value="mes">Mensual</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Precio promocional</label><input type="number" id="promoPrecio" placeholder="0"></div>
+            <div class="form-group"><label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="promoActiva" style="width:auto;" checked> Activa</label></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Fecha inicio</label><input type="date" id="promoInicio"></div>
+            <div class="form-group"><label>Fecha fin</label><input type="date" id="promoFin"></div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:8px;">
+            <button class="btn-primary" onclick="savePromo()" id="promoFormSubmitBtn">Guardar promoción</button>
+            <button class="btn-outline" onclick="resetPromoForm()">Cancelar edición</button>
+          </div>
+        </div>
+
+        <div class="admin-table-wrap">
+          <table>
+            <thead><tr><th>Producto</th><th>Tipo</th><th>Precio promo</th><th>Vigencia</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="adminPromosBody"><tr class="loading-row"><td colspan="6">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===== TAB: ANALÍTICA ===== -->
+      <div class="admin-panel" id="adminTab-analitica">
+        <div id="analiticaWrap"></div>
+      </div>
+
     </div>
   </div>
 </div>
+
+<!-- ============ MODAL: FACTURA / COMPROBANTE ============ -->
+<div class="factura-overlay" id="facturaOverlay" onclick="if(event.target===this)closeFactura()">
+  <div class="factura-modal">
+    <div class="factura-print" id="facturaPrintArea"></div>
+    <div class="factura-modal-actions">
+      <button class="btn-primary" onclick="printFactura()"><i class="ti ti-printer"></i> Imprimir</button>
+      <button class="btn-outline" onclick="closeFactura()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- ============ MODAL: DETALLE DE PRODUCTO ============ -->
 <div class="detail-overlay" id="detailOverlay" onclick="if(event.target===this)closeDetail()">
@@ -348,6 +467,7 @@
 <!-- firebase-config.js es un módulo ES; expone window._fbDb / _fbAuth / _fbFns -->
 <script type="module" src="js/firebase-config.js"></script>
 <script src="js/ui.js"></script>
+<script src="js/mock-data.js"></script>
 <script src="js/cart.js"></script>
 <script src="js/catalog.js"></script>
 <script src="js/admin.js"></script>

@@ -5,20 +5,26 @@
    + IBM Plex Mono (precios / referencias, evocando etiquetas de lab).
 =================================================================== */
 :root{
-  /* color */
-  --bg:#FAFAF9;
+  /* color — paleta de marca DentiBox (extraída del logo) */
+  --navy:#16305C;        /* azul marino — texto, encabezados, botones principales */
+  --deep:#1B4F91;        /* azul profundo — acentos, hover, elementos secundarios */
+  --sky:#4FC3E8;         /* azul cielo — destacados, etiquetas de promoción, íconos */
+  --paper:#F7FAFC;       /* blanco/gris muy claro — fondos */
+
+  --bg:var(--paper);
   --surface:#FFFFFF;
-  --bg-soft:#F1F4F2;
-  --border:#E1E6E3;
-  --border-strong:#C9D1CC;
-  --text:#151A18;
-  --muted:#667069;
-  --muted-2:#8B948E;
-  --accent:#0E6E5C;
-  --accent-dark:#0B584A;
-  --accent-soft:#E3F1EC;
-  --tag-oferta:#A8412B;
-  --tag-nuevo:#0E6E5C;
+  --bg-soft:#EDF3FA;
+  --border:#DCE6F0;
+  --border-strong:#BCCEE1;
+  --text:#14213A;
+  --muted:#57667E;
+  --muted-2:#8393AB;
+  --accent:var(--deep);
+  --accent-dark:var(--navy);
+  --accent-soft:#E4EEFA;
+  --sky-soft:#E3F7FD;
+  --tag-oferta:#C24A2B;
+  --tag-nuevo:var(--sky);
   --warn:#96700A;
   --warn-soft:#FBF0D9;
   --danger:#B3261E;
@@ -301,6 +307,85 @@ tr:last-child td{border-bottom:none;}
 .admin-action-btn.danger:hover{border-color:var(--danger);color:var(--danger);}
 .btn-block{width:100%;}
 
+/* ===== ADMIN: banner modo demo ===== */
+.demo-banner{background:var(--sky-soft);border:1px solid var(--sky);color:var(--navy);border-radius:var(--radius-md);padding:10px 16px;font-size:0.78rem;margin-bottom:var(--space-6);display:flex;align-items:center;gap:8px;}
+.demo-banner i{color:var(--deep);flex-shrink:0;}
+
+/* ===== ADMIN: barra de búsqueda ===== */
+.admin-search{position:relative;margin-bottom:var(--space-5);}
+.admin-search i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted-2);font-size:15px;}
+.admin-search input{width:100%;padding:11px 14px 11px 38px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);font-size:0.86rem;background:var(--surface);outline:none;color:var(--text);}
+.admin-search input:focus{border-color:var(--accent);}
+
+/* ===== ADMIN: stat cards (analítica) ===== */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:var(--space-4);margin-bottom:var(--space-6);}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-5);}
+.stat-card .stat-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);font-weight:600;}
+.stat-card .stat-value{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;color:var(--navy);margin-top:4px;}
+.stat-card .stat-sub{font-size:0.72rem;color:var(--muted-2);margin-top:2px;}
+.admin-subhead{font-size:0.95rem;font-weight:700;margin:var(--space-6) 0 var(--space-3);color:var(--navy);}
+.rank-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent-soft);color:var(--deep);font-family:'IBM Plex Mono',monospace;font-size:0.68rem;font-weight:700;margin-right:6px;}
+
+/* ===== ADMIN: cola de pedidos ===== */
+.queue-list{display:flex;flex-direction:column;gap:var(--space-4);}
+.queue-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;}
+.queue-card-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:var(--space-4) var(--space-5);flex-wrap:wrap;border-bottom:1px solid var(--border);}
+.queue-order-id{font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--navy);font-size:0.9rem;}
+.queue-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.queue-client{font-weight:600;font-size:0.88rem;}
+.queue-time{font-size:0.72rem;color:var(--muted-2);}
+.badge-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;}
+.badge-pendiente{background:var(--warn-soft);color:var(--warn);}
+.badge-alistado{background:var(--sky-soft);color:var(--deep);}
+.badge-entregado{background:var(--accent-soft);color:var(--deep);}
+.badge-cancelado{background:#F6E1DE;color:var(--danger);}
+.badge-origen{background:var(--bg-soft);color:var(--muted);}
+.queue-items{padding:var(--space-3) var(--space-5);}
+.queue-item-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--border);font-size:0.83rem;}
+.queue-item-row:last-child{border-bottom:none;}
+.queue-item-name{flex:1;}
+.queue-item-qty{font-family:'IBM Plex Mono',monospace;color:var(--muted);margin:0 10px;}
+.queue-item-remove{background:none;border:none;color:var(--muted-2);cursor:pointer;font-size:14px;padding:3px;}
+.queue-item-remove:hover{color:var(--danger);}
+.queue-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:var(--space-4) var(--space-5);background:var(--bg-soft);flex-wrap:wrap;}
+.queue-total{font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--navy);}
+.queue-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.btn-sm{padding:7px 12px;font-size:0.76rem;font-weight:600;border-radius:var(--radius-sm);cursor:pointer;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);display:inline-flex;align-items:center;gap:5px;transition:all 0.15s;}
+.btn-sm:hover{border-color:var(--accent);color:var(--accent);}
+.btn-sm.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+.btn-sm.primary:hover{background:var(--accent-dark);border-color:var(--accent-dark);}
+.btn-sm.danger:hover{border-color:var(--danger);color:var(--danger);}
+
+/* ===== ADMIN: clientes / historial ===== */
+.client-history-row td{background:var(--bg-soft);}
+.client-history-wrap{padding:var(--space-4);}
+.client-history-wrap table{background:var(--surface);}
+
+/* ===== ADMIN: promociones ===== */
+.promo-type-pill{background:var(--sky-soft);color:var(--deep);padding:3px 9px;border-radius:99px;font-size:0.7rem;font-weight:700;text-transform:capitalize;}
+
+/* ===== FACTURA / IMPRESIÓN ===== */
+.factura-overlay{position:fixed;inset:0;background:rgba(20,33,58,0.55);display:none;align-items:center;justify-content:center;z-index:2000;padding:20px;}
+.factura-overlay.open{display:flex;}
+.factura-modal{background:#fff;width:100%;max-width:420px;max-height:90vh;overflow-y:auto;border-radius:var(--radius-md);box-shadow:var(--shadow-md);}
+.factura-modal-actions{display:flex;gap:8px;padding:var(--space-4) var(--space-5);border-top:1px solid var(--border);}
+.factura-print{padding:var(--space-6);font-size:0.85rem;}
+.factura-print .f-brand{font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--navy);font-size:1.1rem;}
+.factura-print .f-sub{color:var(--muted);font-size:0.72rem;margin-bottom:var(--space-4);}
+.factura-print .f-row{display:flex;justify-content:space-between;padding:4px 0;}
+.factura-print hr{border:none;border-top:1px dashed var(--border-strong);margin:var(--space-3) 0;}
+.factura-print table{width:100%;font-size:0.8rem;}
+.factura-print th{background:none;padding:4px 0;border-bottom:1px solid var(--text);font-size:0.68rem;}
+.factura-print td{padding:5px 0;border-bottom:none;}
+.factura-print .f-total{font-weight:700;font-size:1rem;color:var(--navy);}
+@media print{
+  body *{visibility:hidden;}
+  .factura-print,.factura-print *{visibility:visible;}
+  .factura-print{position:absolute;top:0;left:0;width:100%;padding:0;}
+  .factura-overlay,.factura-modal{position:static;background:none;box-shadow:none;max-width:none;}
+  .factura-modal-actions{display:none;}
+}
+
 /* ===== UTILITIES ===== */
 .text-center{text-align:center;}
 .mt-4{margin-top:var(--space-4);}
@@ -321,4 +406,7 @@ tr:last-child td{border-bottom:none;}
 @media (max-width:600px){
   .catalog-toolbar{flex-direction:column;align-items:stretch;}
   .form-row{flex-direction:column;gap:0;}
+  .queue-card-header,.queue-footer{flex-direction:column;align-items:flex-start;}
+  .queue-actions{width:100%;}
+  .queue-actions .btn-sm{flex:1;justify-content:center;}
 }

@@ -51,8 +51,17 @@ function toggleMobileMenu() {
   document.getElementById('mobileMenu')?.classList.toggle('open');
 }
 
+/** Formatea un ISO string como fecha/hora corta en español. */
+function formatDateEs(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('es-CO', { day: '2-digit', month: 'short' }) + ' · ' +
+    d.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+}
+
 window.escapeHtml = escapeHtml;
 window.formatCOP = formatCOP;
+window.formatDateEs = formatDateEs;
 window.showToast = showToast;
 window.goToPage = goToPage;
 window.toggleMobileMenu = toggleMobileMenu;
