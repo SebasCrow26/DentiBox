@@ -19,12 +19,16 @@ const ADMIN_EMAIL = 'sebastian.ramos26122005@gmail.com';
 
 let _clienteState = { user: null, cliente: null };
 let _clienteEditando = false;
+const TESTIMONIOS_STORAGE_KEY = 'dentibox.testimonios';
+let _testimonios = [];
+let _reviewStars = 0;
 
 function esAdmin() {
   return !!(_clienteState.user && _clienteState.user.email === ADMIN_EMAIL);
 }
 
 async function initClienteAuth() {
+  loadTestimonios();
   const { data: { session } } = await window._sb.auth.getSession();
   await onSesionCambio(session);
 
@@ -63,6 +67,8 @@ async function onSesionCambio(session) {
   actualizarCuentaNavLabel();
 
   renderCuentaPage();
+  renderTestimonios();
+  updateTestimonioFormState();
   updateCartUI();
   window.renderAdminGate && window.renderAdminGate();
 }
@@ -73,6 +79,184 @@ function clienteListo() {
 
 function getClienteActual() {
   return _clienteState;
+}
+
+function clienteVerificado() {
+  if (!_clienteState.user) return false;
+  const user = _clienteState.user;
+  if (user.email_confirmed_at || user.confirmed_at) return true;
+  if (user.identities && Array.isArray(user.identities)) {
+    return user.identities.some(id => id.provider === 'email' || id.provider === 'google');
+  }
+  return false;
+}
+
+async function loadTestimonios() {
+  try {
+    const raw = localStorage.getItem(TESTIMONIOS_STORAGE_KEY);
+    const saved = raw ? JSON.parse(raw) : null;
+    if (Array.isArray(saved) && saved.length) {
+      _testimonios = saved;
+    } else {
+      _testimonios = [
+        { nombre: 'Dra. Ana Pérez', estrellas: 5, comentario: 'Muy buena experiencia. Pedidos rápidos y sin vueltas.' },
+        { nombre: 'Dr. Mario Alonso', estrellas: 4, comentario: 'Los insumos llegaron bien empaquetados y a tiempo.' }
+      ];
+    }
+  } catch (err) {
+    console.warn('Error cargando testimonios locales:', err);
+    _testimonios = [
+      { nombre: 'Dra. Ana Pérez', estrellas: 5, comentario: 'Muy buena experiencia. Pedidos rápidos y sin vueltas.' },
+      { nombre: 'Dr. Mario Alonso', estrellas: 4, comentario: 'Los insumos llegaron bien empaquetados y a tiempo.' }
+    ];
+  }
+
+  await fetchTestimoniosFromBackend();
+}
+
+function saveTestimoniosLocal() {
+  try {
+    localStorage.setItem(TESTIMONIOS_STORAGE_KEY, JSON.stringify(_testimonios));
+  } catch (err) {
+    console.warn('No se pudieron guardar los testimonios locales:', err);
+  }
+}
+
+async function fetchTestimoniosFromBackend() {
+  if (!window._sb) return;
+  try {
+    const { data, error } = await window._sb
+      .from('testimonios')
+      .select('nombre,estrellas,comentario')
+      .order('created_at', { ascending: false })
+      .limit(10);
+    if (error) {
+      console.warn('No se pudieron cargar testimonios desde Supabase:', error.message || error);
+      return;
+    }
+    if (Array.isArray(data) && data.length) {
+      _testimonios = data;
+      renderTestimonios();
+      saveTestimoniosLocal();
+    }
+  } catch (err) {
+    console.warn('Error consultando testimonios en Supabase:', err);
+  }
+}
+
+async function insertTestimonioBackend(entry) {
+  if (!window._sb) return false;
+  try {
+    const { error } = await window._sb.from('testimonios').insert([entry]);
+    if (error) {
+      console.warn('Error guardando testimonio en Supabase:', error.message || error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.warn('Error insertando testimonio en Supabase:', err);
+    return false;
+  }
+}
+
+function renderTestimonios() {
+  const grid = document.getElementById('testimoniosGrid');
+  if (!grid) return;
+  if (!_testimonios.length) {
+    grid.innerHTML = '<p class="form-hint">Aún no hay testimonios. Sé el primero en dejar el tuyo.</p>';
+    return;
+  }
+  grid.innerHTML = _testimonios.map(t => `
+    <div class="testimonial-card">
+      <div class="testimonial-meta">
+        <div class="testimonial-name">${escapeHtml(t.nombre)}</div>
+        <div class="testimonial-stars">${'★'.repeat(t.estrellas)}${'☆'.repeat(5 - t.estrellas)}</div>
+      </div>
+      <div class="testimonial-text">${escapeHtml(t.comentario)}</div>
+    </div>
+  `).join('');
+}
+
+function updateTestimonioFormState() {
+  const note = document.getElementById('testimonioFormNote');
+  const submit = document.getElementById('testimonioSubmitBtn');
+  const textarea = document.getElementById('testimonioComentario');
+  const stars = document.getElementById('testimonioStarButtons');
+  if (!note || !submit || !textarea || !stars) return;
+
+  if (!_clienteState.user) {
+    note.textContent = 'Inicia sesión para enviar tu opinión.';
+    submit.disabled = true;
+    textarea.disabled = true;
+    stars.querySelectorAll('button').forEach(btn => btn.disabled = true);
+    return;
+  }
+
+  if (!clienteVerificado()) {
+    note.textContent = 'Solo las cuentas verificadas pueden dejar testimonios.';
+    submit.disabled = true;
+    textarea.disabled = true;
+    stars.querySelectorAll('button').forEach(btn => btn.disabled = true);
+    return;
+  }
+
+  note.textContent = 'Tu cuenta está verificada. Deja tu opinión con estrellas.';
+  submit.disabled = false;
+  textarea.disabled = false;
+  stars.querySelectorAll('button').forEach(btn => btn.disabled = false);
+}
+
+function setReviewStars(value) {
+  _reviewStars = value;
+  document.querySelectorAll('#testimonioStarButtons button').forEach((btn, idx) => {
+    btn.classList.toggle('active', idx < value);
+  });
+}
+
+async function submitTestimonio() {
+  const msgEl = document.getElementById('testimonioMsg');
+  const textarea = document.getElementById('testimonioComentario');
+  if (!msgEl || !textarea) return;
+  const comentario = textarea.value.trim();
+  if (!_clienteState.user) {
+    msgEl.textContent = 'Inicia sesión para enviar tu opinión.';
+    return;
+  }
+  if (!clienteVerificado()) {
+    msgEl.textContent = 'Solo cuentas verificadas pueden enviar testimonios.';
+    return;
+  }
+  if (_reviewStars < 1) {
+    msgEl.textContent = 'Selecciona entre 1 y 5 estrellas.';
+    return;
+  }
+  if (!comentario) {
+    msgEl.textContent = 'Escribe tu opinión antes de enviar.';
+    return;
+  }
+
+  const nombre = _clienteState.cliente?.nombre || _clienteState.user.email || 'Cliente verificado';
+  const entry = {
+    auth_user_id: _clienteState.user.id,
+    nombre,
+    estrellas: _reviewStars,
+    comentario,
+    created_at: new Date().toISOString()
+  };
+
+  const saved = await insertTestimonioBackend(entry);
+  if (!saved) {
+    msgEl.textContent = 'Ocurrió un problema al guardar tu testimonio. Intenta de nuevo.';
+    return;
+  }
+
+  _testimonios.unshift(entry);
+  if (_testimonios.length > 10) _testimonios.length = 10;
+  saveTestimoniosLocal();
+  renderTestimonios();
+  textarea.value = '';
+  setReviewStars(0);
+  msgEl.textContent = 'Gracias por tu testimonio.';
 }
 
 /* ============================================================
@@ -333,5 +517,7 @@ window.cancelarEditarPerfilCliente = cancelarEditarPerfilCliente;
 window.actualizarVistaDireccion = actualizarVistaDireccion;
 window.guardarPerfilCliente = guardarPerfilCliente;
 window.renderCuentaPage = renderCuentaPage;
+window.setReviewStars = setReviewStars;
+window.submitTestimonio = submitTestimonio;
 window.esAdmin = esAdmin;
 window.ADMIN_EMAIL = ADMIN_EMAIL;

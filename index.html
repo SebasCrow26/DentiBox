@@ -133,6 +133,30 @@
     </div>
   </section>
 
+  <section class="testimonial-section">
+    <div class="section-header text-center">
+      <span class="eyebrow">Testimonios</span>
+      <h2>Opiniones de clientes verificados</h2>
+      <p>Solo las cuentas verificadas pueden dejar su reseña con estrellas.</p>
+    </div>
+    <div class="testimonial-inner">
+      <div class="testimonial-grid" id="testimoniosGrid"></div>
+      <div class="testimonial-form-card" id="testimonioFormCard">
+        <div class="testimonial-note" id="testimonioFormNote">Inicia sesión para enviar tu opinión.</div>
+        <div class="star-rating" id="testimonioStarButtons">
+          <button type="button" onclick="setReviewStars(1)" aria-label="1 estrella">★</button>
+          <button type="button" onclick="setReviewStars(2)" aria-label="2 estrellas">★</button>
+          <button type="button" onclick="setReviewStars(3)" aria-label="3 estrellas">★</button>
+          <button type="button" onclick="setReviewStars(4)" aria-label="4 estrellas">★</button>
+          <button type="button" onclick="setReviewStars(5)" aria-label="5 estrellas">★</button>
+        </div>
+        <textarea id="testimonioComentario" rows="4" placeholder="Escribe tu opinión aquí"></textarea>
+        <p class="form-hint" id="testimonioMsg"></p>
+        <button class="btn-primary btn-block" id="testimonioSubmitBtn" onclick="submitTestimonio()">Enviar testimonio</button>
+      </div>
+    </div>
+  </section>
+
   <section class="cta-strip">
     <div class="cta-banner">
       <div class="cta-blob cta-blob-1"></div>

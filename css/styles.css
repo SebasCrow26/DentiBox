@@ -171,6 +171,29 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:68px;background:rgba
 .step h4{font-weight:700;font-size:0.94rem;color:var(--text);margin-bottom:6px;}
 .step p{color:var(--muted);font-size:0.82rem;line-height:1.55;}
 
+/* ===== TESTIMONIAL SECTION ===== */
+.testimonial-section{padding:var(--space-16) 5%;background:var(--bg-soft);}
+.testimonial-inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:var(--space-8);align-items:start;}
+.testimonial-grid{display:grid;gap:var(--space-6);}
+.testimonial-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--space-6);box-shadow:var(--shadow-sm);transition:transform 0.2s,var(--ease);}
+.testimonial-card:hover{transform:translateY(-3px);}
+.testimonial-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-4);}
+.testimonial-name{font-weight:700;color:var(--navy);}
+.testimonial-stars{color:#F6B329;}
+.testimonial-text{color:var(--muted);font-size:0.92rem;line-height:1.8;}
+.testimonial-form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--space-6);box-shadow:var(--shadow-sm);}
+.testimonial-note{color:var(--muted-2);font-size:0.88rem;margin-bottom:var(--space-4);}
+.star-rating{display:flex;gap:5px;margin-bottom:var(--space-4);}
+.star-rating button{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-size:1.1rem;cursor:pointer;transition:all 0.2s var(--ease);}
+.star-rating button.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.star-rating button:hover{border-color:var(--accent);color:var(--accent);}
+.testimonial-form-card textarea{width:100%;min-height:120px;padding:14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);resize:vertical;outline:none;transition:border-color 0.2s var(--ease);}
+.testimonial-form-card textarea:focus{border-color:var(--accent);}
+#testimonioSubmitBtn{margin-top:var(--space-4);}
+@media (max-width:860px){
+  .testimonial-inner{grid-template-columns:1fr;}
+}
+
 /* ===== CTA STRIP ===== */
 .cta-strip{padding:var(--space-16) 5%;}
 .cta-banner{position:relative;overflow:hidden;max-width:1180px;margin:0 auto;background:var(--navy);border-radius:var(--radius-lg);padding:var(--space-16) var(--space-8);text-align:center;}
