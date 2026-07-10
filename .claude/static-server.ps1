@@ -19,6 +19,11 @@ while ($listener.IsListening) {
   $path = $req.Url.LocalPath
   if ($path -eq "/") { $path = "/index.html" }
   $filePath = Join-Path $root ($path.TrimStart("/"))
+  if (-not (Test-Path $filePath -PathType Leaf)) {
+    # SPA fallback (imita _redirects de Cloudflare Pages): cualquier ruta
+    # sin archivo real sirve index.html y el router de JS decide la página.
+    $filePath = Join-Path $root "index.html"
+  }
   if (Test-Path $filePath -PathType Leaf) {
     $ext = [System.IO.Path]::GetExtension($filePath)
     $ct = $mime[$ext]

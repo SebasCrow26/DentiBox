@@ -5,11 +5,17 @@
    cada cambio de sesión) — no necesita inicialización aparte aquí.
 ===================================================================== */
 
-function initApp() {
+async function initApp() {
   loadCart();
-  loadProducts();
+  await loadProducts();
   initClienteAuth();
   updateCartUI();
+
+  // Muestra la página real de la URL con la que se entró (deep link / refresh),
+  // en vez de arrancar siempre en "inicio".
+  const { pageId, extra } = resolveRoute();
+  goToPage(pageId, { extra, updateUrl: false });
+  if (pageId === 'tienda' && extra) openDetail(extra, { updateUrl: false });
 }
 
 if (window._sb) {
@@ -22,7 +28,7 @@ if (window._sb) {
 // Cierre de modales con la tecla Escape
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
-  document.getElementById('detailOverlay')?.classList.remove('open');
+  window.closeDetail && closeDetail();
   document.getElementById('facturaOverlay')?.classList.remove('open');
   window.toggleCart && window.toggleCart(false);
 });

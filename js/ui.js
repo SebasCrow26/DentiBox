@@ -35,8 +35,31 @@ function showToast(msg, type = '') {
   window._toastTimer = setTimeout(() => { el.classList.remove('show'); }, 2600);
 }
 
-/** Navegación simple entre "páginas" (SPA de una sola página HTML). */
-function goToPage(pageId) {
+/* =====================================================================
+   ROUTING — cada página tiene su propia URL real (history API), para
+   que se pueda entrar directo, refrescar o compartir el link. Requiere
+   que el hosting sirva index.html para cualquier ruta (ver _redirects,
+   pensado para Cloudflare Pages).
+===================================================================== */
+const PAGE_PATHS = { inicio: '/', tienda: '/catalogo', contacto: '/contacto', cuenta: '/cuenta', admin: '/admin' };
+const PATH_PAGES = { '': 'inicio', catalogo: 'tienda', contacto: 'contacto', cuenta: 'cuenta', admin: 'admin' };
+
+function pathForPage(pageId, extra) {
+  const base = PAGE_PATHS[pageId] || '/';
+  if (!extra) return base;
+  return (base === '/' ? '' : base) + '/' + extra;
+}
+
+/** Lee location.pathname y devuelve a qué página/ítem corresponde. */
+function resolveRoute() {
+  const parts = location.pathname.split('/').filter(Boolean);
+  const pageId = PATH_PAGES[parts[0] || ''] || 'inicio';
+  return { pageId, extra: parts[1] || null };
+}
+
+/** Navegación entre "páginas" (SPA de una sola página HTML) + URL real. */
+function goToPage(pageId, opts = {}) {
+  const { extra = null, updateUrl = true } = opts;
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = document.getElementById('page-' + pageId);
   if (target) target.classList.add('active');
@@ -45,7 +68,30 @@ function goToPage(pageId) {
   });
   document.getElementById('mobileMenu')?.classList.remove('open');
   window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+
+  if (pageId === 'tienda' && window.renderCatalog) renderCatalog();
+  if (pageId === 'cuenta' && window.renderCuentaPage) renderCuentaPage();
+
+  if (updateUrl) {
+    const path = pathForPage(pageId, extra);
+    if (location.pathname !== path) history.pushState({ pageId, extra }, '', path);
+  }
 }
+
+/** Handler de clic para <a> internos: SPA en clic normal, deja abrir en pestaña nueva con ctrl/cmd/clic central. */
+function navClick(e, pageId, extra) {
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+  e.preventDefault();
+  if (pageId === 'tienda' && extra && window.openDetail) { openDetail(extra); return; }
+  goToPage(pageId, { extra });
+}
+
+window.addEventListener('popstate', () => {
+  const { pageId, extra } = resolveRoute();
+  goToPage(pageId, { updateUrl: false });
+  if (pageId === 'tienda' && extra && window.openDetail) openDetail(extra, { updateUrl: false });
+  else window.closeDetail && closeDetail({ updateUrl: false });
+});
 
 function toggleMobileMenu() {
   document.getElementById('mobileMenu')?.classList.toggle('open');
@@ -64,4 +110,7 @@ window.formatCOP = formatCOP;
 window.formatDateEs = formatDateEs;
 window.showToast = showToast;
 window.goToPage = goToPage;
+window.navClick = navClick;
+window.pathForPage = pathForPage;
+window.resolveRoute = resolveRoute;
 window.toggleMobileMenu = toggleMobileMenu;

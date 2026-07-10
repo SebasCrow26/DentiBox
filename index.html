@@ -11,12 +11,12 @@
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 
 <title>DentiBox | Insumos Odontológicos</title>
-<meta name="description" content="Insumos odontológicos de calidad: restauración, ortodoncia, bioseguridad e instrumental. Pedidos por WhatsApp, entrega rápida.">
+<meta name="description" content="Insumos odontológicos de calidad: restauración, ortodoncia, bioseguridad e instrumental. Pide contra entrega, entrega rápida.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://tudominio.com/">
+<link rel="canonical" href="https://dentibox.pages.dev/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="DentiBox | Insumos Odontológicos">
-<meta property="og:description" content="Insumos odontológicos de calidad para tu consultorio. Pedidos por WhatsApp, entrega rápida.">
+<meta property="og:description" content="Insumos odontológicos de calidad para tu consultorio. Pide contra entrega, entrega rápida.">
 <meta property="og:locale" content="es_CO">
 <meta property="og:site_name" content="DentiBox">
 <meta name="twitter:card" content="summary_large_image">
@@ -31,7 +31,7 @@
 <!-- ============ NAV ============ -->
 <nav>
   <div class="nav-inner">
-    <a href="#" class="nav-logo" onclick="goToPage('inicio')">
+    <a href="/" class="nav-logo" onclick="navClick(event,'inicio')">
       <span class="nav-logo-mark">D+</span>
       <span class="nav-logo-texts">
         <span class="brand">DentiBox</span>
@@ -39,9 +39,9 @@
       </span>
     </a>
     <ul class="nav-links">
-      <li><a data-page="inicio" onclick="goToPage('inicio')" class="active">Inicio</a></li>
-      <li><a data-page="tienda" onclick="goToPage('tienda');renderCatalog()">Catálogo</a></li>
-      <li><a data-page="contacto" onclick="goToPage('contacto')">Contacto</a></li>
+      <li><a data-page="inicio" href="/" onclick="navClick(event,'inicio')" class="active">Inicio</a></li>
+      <li><a data-page="tienda" href="/catalogo" onclick="navClick(event,'tienda')">Catálogo</a></li>
+      <li><a data-page="contacto" href="/contacto" onclick="navClick(event,'contacto')">Contacto</a></li>
     </ul>
     <div class="nav-right">
       <button class="nav-cart-btn" onclick="toggleCart()">
@@ -49,8 +49,8 @@
         <span class="nav-cart-text">Carrito</span>
         <span class="cart-count" id="cartCount">0</span>
       </button>
-      <a class="nav-login-btn" id="navCuentaLink" onclick="goToPage('cuenta')">Mi cuenta</a>
-      <a class="nav-admin-link" id="navAdminLink" onclick="goToPage('admin')" style="display:none;">Admin</a>
+      <a class="nav-login-btn" id="navCuentaLink" href="/cuenta" onclick="navClick(event,'cuenta')">Mi cuenta</a>
+      <a class="nav-admin-link" id="navAdminLink" href="/admin" onclick="navClick(event,'admin')" style="display:none;">Admin</a>
       <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menú">
         <span></span><span></span><span></span>
       </button>
@@ -58,11 +58,11 @@
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
-  <a onclick="goToPage('inicio')">Inicio</a>
-  <a onclick="goToPage('tienda');renderCatalog()">Catálogo</a>
-  <a onclick="goToPage('contacto')">Contacto</a>
-  <a onclick="goToPage('cuenta')">Mi cuenta</a>
-  <a id="navAdminLinkMobile" onclick="goToPage('admin')" style="display:none;">Admin</a>
+  <a href="/" onclick="navClick(event,'inicio')">Inicio</a>
+  <a href="/catalogo" onclick="navClick(event,'tienda')">Catálogo</a>
+  <a href="/contacto" onclick="navClick(event,'contacto')">Contacto</a>
+  <a href="/cuenta" onclick="navClick(event,'cuenta')">Mi cuenta</a>
+  <a id="navAdminLinkMobile" href="/admin" onclick="navClick(event,'admin')" style="display:none;">Admin</a>
 </div>
 
 <!-- ============ PAGE: INICIO ============ -->
@@ -75,8 +75,8 @@
         <h1 class="hero-title">Insumos dentales,<br><em>sin complicaciones.</em></h1>
         <p class="hero-desc">El depósito dental digital de tu consultorio: pide contra entrega, elige entre nuestro catálogo completo de insumos y recibe donde estés, sin adelantos ni vueltas.</p>
         <div class="hero-actions">
-          <button class="btn-primary" onclick="goToPage('tienda');renderCatalog()"><i class="ti ti-shopping-bag"></i> Explorar catálogo</button>
-          <a class="btn-outline" href="#como-funciona" onclick="goToPage('inicio')">Cómo funciona</a>
+          <button class="btn-primary" onclick="goToPage('tienda')"><i class="ti ti-shopping-bag"></i> Explorar catálogo</button>
+          <a class="btn-outline" href="#como-funciona" onclick="goToPage('inicio',{updateUrl:false})">Cómo funciona</a>
         </div>
       </div>
       <div class="hero-visual">
@@ -87,7 +87,7 @@
             <span>Tienda DentiBox</span>
             <span class="hero-card-dot"></span>
           </div>
-          <div class="hero-card-preview"><span>vista previa · catálogo</span></div>
+          <div class="hero-card-preview"><span>pago contra entrega</span></div>
           <div class="hero-card-line" style="width:80%;"></div>
           <div class="hero-card-line" style="width:55%;"></div>
         </div>
@@ -117,42 +117,6 @@
           <div class="feat-icon"><i class="ti ti-bolt"></i></div>
           <h3>Entrega rápida</h3>
           <p>Recibe tus pedidos directo en el consultorio, sin perder tiempo de consulta.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="categories" id="categorias">
-    <div class="categories-inner">
-      <div class="section-header">
-        <span class="eyebrow">Catálogo</span>
-        <h2>Todo lo que tu consultorio necesita</h2>
-        <p>Explora nuestras categorías y arma tu pedido en minutos.</p>
-      </div>
-      <div class="categories-grid">
-        <div class="cat-card" onclick="goToPage('tienda');renderCatalog();setActiveCategory('restauracion',document.querySelector('[data-cat=restauracion]'))">
-          <div class="cat-stripe cat-stripe-1"><i class="ti ti-flask"></i></div>
-          <div class="cat-body"><h3>Restauración</h3><p>Resinas, cementos y adhesivos.</p></div>
-        </div>
-        <div class="cat-card" onclick="goToPage('tienda');renderCatalog();setActiveCategory('ortodoncia',document.querySelector('[data-cat=ortodoncia]'))">
-          <div class="cat-stripe cat-stripe-2"><i class="ti ti-align-center"></i></div>
-          <div class="cat-body"><h3>Ortodoncia</h3><p>Brackets, arcos y ligas.</p></div>
-        </div>
-        <div class="cat-card" onclick="goToPage('tienda');renderCatalog();setActiveCategory('bioseguridad',document.querySelector('[data-cat=bioseguridad]'))">
-          <div class="cat-stripe cat-stripe-3"><i class="ti ti-shield-check"></i></div>
-          <div class="cat-body"><h3>Bioseguridad</h3><p>Guantes, mascarillas y desinfección.</p></div>
-        </div>
-        <div class="cat-card" onclick="goToPage('tienda');renderCatalog();setActiveCategory('instrumental',document.querySelector('[data-cat=instrumental]'))">
-          <div class="cat-stripe cat-stripe-4"><i class="ti ti-tool"></i></div>
-          <div class="cat-body"><h3>Instrumental</h3><p>Fresas, espejos, pinzas y más.</p></div>
-        </div>
-        <div class="cat-card" onclick="goToPage('tienda');renderCatalog();setActiveCategory('endodoncia',document.querySelector('[data-cat=endodoncia]'))">
-          <div class="cat-stripe cat-stripe-5"><i class="ti ti-file-analytics"></i></div>
-          <div class="cat-body"><h3>Endodoncia</h3><p>Limas, conos y selladores.</p></div>
-        </div>
-        <div class="cat-card" onclick="goToPage('tienda');renderCatalog();setActiveCategory('consumibles',document.querySelector('[data-cat=consumibles]'))">
-          <div class="cat-stripe cat-stripe-6"><i class="ti ti-package"></i></div>
-          <div class="cat-body"><h3>Consumibles</h3><p>Piezas de mano, agujas y anestesia.</p></div>
         </div>
       </div>
     </div>
@@ -190,8 +154,8 @@
       <span class="nav-logo-mark">D+</span>
       <p>© 2026 DentiBox. Todos los derechos reservados.</p>
       <div class="footer-links">
-        <a onclick="goToPage('tienda');renderCatalog()">Catálogo</a>
-        <a onclick="goToPage('contacto')">Contacto</a>
+        <a href="/catalogo" onclick="navClick(event,'tienda')">Catálogo</a>
+        <a href="/contacto" onclick="navClick(event,'contacto')">Contacto</a>
       </div>
     </div>
   </footer>
@@ -293,7 +257,7 @@
       <p class="form-hint" id="cuentaTelefonoListo"></p>
       <p class="form-hint" id="cuentaDireccionListo"></p>
       <div style="display:flex;gap:10px;margin-top:var(--space-4);">
-        <button class="btn-primary" onclick="goToPage('tienda');renderCatalog()"><i class="ti ti-shopping-bag"></i> Ir a la tienda</button>
+        <button class="btn-primary" onclick="goToPage('tienda')"><i class="ti ti-shopping-bag"></i> Ir a la tienda</button>
         <button class="btn-outline" onclick="clienteCerrarSesion()"><i class="ti ti-logout"></i> Cerrar sesión</button>
       </div>
     </div>

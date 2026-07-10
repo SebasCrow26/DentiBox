@@ -104,7 +104,7 @@ function productCardHtml(p) {
   const oldPrice = p.precioAnterior ? `<span class="old">${formatCOP(p.precioAnterior)}</span>` : '';
 
   return `
-  <div class="prod-card" onclick="openDetail('${p.id}')">
+  <a class="prod-card" href="${pathForPage('tienda', p.id)}" onclick="navClick(event,'tienda','${p.id}')">
     ${badge}
     <div class="prod-img">${img}</div>
     <div class="prod-body">
@@ -113,10 +113,10 @@ function productCardHtml(p) {
       <p class="prod-desc">${escapeHtml((p.descripcion || '').slice(0, 70))}</p>
       <div class="prod-footer">
         <div class="prod-price">${oldPrice}<span class="current">${formatCOP(p.precio)}</span></div>
-        <button class="add-btn" onclick="event.stopPropagation();addToCart('${p.id}',1)"><i class="ti ti-plus"></i> Agregar</button>
+        <button class="add-btn" onclick="event.stopPropagation();event.preventDefault();addToCart('${p.id}',1)"><i class="ti ti-plus"></i> Agregar</button>
       </div>
     </div>
-  </div>`;
+  </a>`;
 }
 
 function setActiveCategory(cat, btnEl) {
@@ -132,7 +132,8 @@ function handleSearch(value) {
 }
 
 /* ===== MODAL DE DETALLE ===== */
-function openDetail(id) {
+function openDetail(id, opts = {}) {
+  const { updateUrl = true } = opts;
   const p = allProducts.find(x => x.id === id);
   if (!p) return;
   currentDetailProduct = p;
@@ -152,11 +153,21 @@ function openDetail(id) {
   document.getElementById('detailQtyVal').textContent = detailQty;
 
   document.getElementById('detailOverlay').classList.add('open');
+
+  if (updateUrl) {
+    const path = pathForPage('tienda', p.id);
+    if (location.pathname !== path) history.pushState({ pageId: 'tienda', extra: p.id }, '', path);
+  }
 }
 
-function closeDetail() {
+function closeDetail(opts = {}) {
+  const { updateUrl = true } = opts;
   document.getElementById('detailOverlay').classList.remove('open');
   currentDetailProduct = null;
+  if (updateUrl) {
+    const path = pathForPage('tienda');
+    if (location.pathname !== path) history.pushState({ pageId: 'tienda' }, '', path);
+  }
 }
 
 function detailQtyChange(delta) {

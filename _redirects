@@ -1,0 +1,5 @@
+# Cloudflare Pages: como es una SPA con rutas manejadas en el navegador
+# (history API, ver js/ui.js), cualquier ruta debe servir index.html y
+# dejar que el router de JS decida qué página mostrar. Sin esto, entrar
+# directo a /catalogo o refrescar en /contacto daría 404.
+/*  /index.html  200
