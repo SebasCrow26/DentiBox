@@ -1,8 +1,11 @@
 /* =====================================================================
-   MAIN.JS — punto de entrada. Se ejecuta cuando el DOM y Firebase
-   (evento 'firebase-ready' disparado por firebase-config.js) están listos.
-   El panel admin corre en modo demo (js/mock-data.js) y no depende de
-   Firebase, así que se inicializa de inmediato.
+   MAIN.JS — punto de entrada. Se ejecuta cuando el DOM y Supabase
+   (evento 'supabase-ready' disparado por supabase-config.js) están listos.
+   El panel admin corre en modo demo (js/mock-data.js) y todavía no
+   depende de Supabase, así que se inicializa de inmediato.
+   NOTA: loadProducts() (catalog.js) sigue escrito contra Firestore por
+   ahora — se reescribe en el próximo paso. Hasta entonces mostrará el
+   estado de error del catálogo, lo cual es esperado.
 ===================================================================== */
 
 if (document.getElementById('adminLoginBox')) initAdminAuth();
@@ -13,11 +16,11 @@ function initApp() {
   updateCartUI();
 }
 
-if (window._fbDb) {
-  // Firebase ya estaba listo (poco probable, pero por si acaso)
+if (window._sb) {
+  // Supabase ya estaba listo (poco probable, pero por si acaso)
   initApp();
 } else {
-  window.addEventListener('firebase-ready', initApp, { once: true });
+  window.addEventListener('supabase-ready', initApp, { once: true });
 }
 
 // Cierre de modales con la tecla Escape

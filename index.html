@@ -6,7 +6,7 @@
 
 <!-- SECURITY HEADERS (CSP vía meta — complementa con headers HTTP en tu hosting si puedes) -->
 <meta http-equiv="Content-Security-Policy"
-  content="default-src 'self' https:; script-src 'self' https://www.gstatic.com https://cdn.jsdelivr.net; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebase.googleapis.com https://www.gstatic.com; frame-src 'none'; object-src 'none'; base-uri 'self';">
+  content="default-src 'self' https:; script-src 'self' https://cdn.jsdelivr.net; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https:; connect-src 'self' https://jhmqvuxarimkndrpdlbf.supabase.co wss://jhmqvuxarimkndrpdlbf.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 
@@ -464,8 +464,9 @@
 </a>
 
 <!-- ============ SCRIPTS ============ -->
-<!-- firebase-config.js es un módulo ES; expone window._fbDb / _fbAuth / _fbFns -->
-<script type="module" src="js/firebase-config.js"></script>
+<!-- Librería de Supabase (UMD) + supabase-config.js, que expone window._sb -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/mock-data.js"></script>
 <script src="js/cart.js"></script>
