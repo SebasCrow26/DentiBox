@@ -6,7 +6,7 @@
 
 <!-- SECURITY HEADERS (CSP vía meta — complementa con headers HTTP en tu hosting si puedes) -->
 <meta http-equiv="Content-Security-Policy"
-  content="default-src 'self' https:; script-src 'self' https://www.gstatic.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebase.googleapis.com; frame-src 'none'; object-src 'none'; base-uri 'self';">
+  content="default-src 'self' https:; script-src 'self' https://www.gstatic.com https://cdn.jsdelivr.net; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebase.googleapis.com https://www.gstatic.com; frame-src 'none'; object-src 'none'; base-uri 'self';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 
@@ -351,16 +351,7 @@
 <script src="js/cart.js"></script>
 <script src="js/catalog.js"></script>
 <script src="js/admin.js"></script>
-<script>
-  // Pequeño helper de la página de contacto (no necesita archivo propio).
-  function enviarContactoWhatsApp() {
-    const nombre = document.getElementById('contactoNombre').value.trim();
-    const mensaje = document.getElementById('contactoMensaje').value.trim();
-    if (!mensaje) { showToast('Escribe un mensaje', 'warning'); return; }
-    const texto = encodeURIComponent(`Hola, soy ${nombre || 'un cliente'}.\n\n${mensaje}`);
-    window.open(`https://wa.me/573000000000?text=${texto}`, '_blank');
-  }
-</script>
+<script src="js/contact.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
