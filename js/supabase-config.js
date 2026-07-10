@@ -23,11 +23,11 @@
 ===================================================================== */
 
 const SUPABASE_URL = 'https://jhmqvuxarimkndrpdlbf.supabase.co';
-const SUPABASE_ANON_KEY = 'TU_ANON_PUBLIC_KEY'; // ⚠️ pega aquí la "anon public" key
+const SUPABASE_ANON_KEY = 'sb_publishable_zSINM2nnxevFftcyyiVhaw_PWkGyNn2'; // ⚠️ pega aquí la "anon public" key
 
 if (!window.supabase || !window.supabase.createClient) {
   console.error('No se encontró la librería de Supabase. Revisa que el <script> del CDN esté antes de supabase-config.js en index.html.');
-} else if (SUPABASE_ANON_KEY === 'TU_ANON_PUBLIC_KEY') {
+} else if (SUPABASE_ANON_KEY === 'sb_publishable_zSINM2nnxevFftcyyiVhaw_PWkGyNn2') {
   console.error('Falta configurar SUPABASE_ANON_KEY en js/supabase-config.js.');
 } else {
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
