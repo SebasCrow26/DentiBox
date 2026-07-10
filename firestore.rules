@@ -1,0 +1,25 @@
+rules_version = '2';
+
+// Reglas recomendadas para la colección "productos":
+// - Cualquiera puede LEER (la tienda es pública).
+// - Solo un usuario autenticado que sea admin puede ESCRIBIR.
+//
+// Cómo marcar un usuario como admin (elige una opción):
+//   A) Custom claims (recomendado): asigna { admin: true } al usuario
+//      desde Cloud Functions o el Admin SDK, y aquí usa:
+//      allow write: if request.auth != null && request.auth.token.admin == true;
+//   B) Lista simple de UID (más fácil de configurar a mano):
+//      reemplaza "TU_UID_AQUI" por el UID de tu usuario admin
+//      (Firebase Console → Authentication → Users → copia el UID).
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /productos/{productId} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.auth.uid == "TU_UID_AQUI";
+    }
+
+  }
+}
