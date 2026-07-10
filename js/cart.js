@@ -1,12 +1,13 @@
 /* =====================================================================
-   CART.JS — carrito persistido en localStorage + checkout vía WhatsApp.
-   Depende de ui.js y de window._getProductById (definido en catalog.js).
+   CART.JS — carrito persistido en localStorage + checkout real contra
+   Supabase (crea filas en `pedidos`/`pedido_items` vía la función RPC
+   `crear_pedido`, ver sql/crear_pedido.sql).
+   Depende de ui.js, de auth.js (window.clienteListo/getClienteActual)
+   y de window._getProductById (definido en catalog.js).
 ===================================================================== */
 
-// ⚠️ Reemplaza por el número de WhatsApp del negocio (formato internacional, sin +).
-const WHATSAPP_NUMBER = '573000000000';
-
 let cart = [];
+let _checkoutEnCurso = false;
 
 function loadCart() {
   try {
@@ -103,18 +104,40 @@ function toggleCart(forceOpen) {
   if (open) updateCartUI();
 }
 
-/** Arma el mensaje de pedido y abre WhatsApp. No procesa pagos: solo formaliza el pedido. */
-function checkoutWhatsApp() {
+/** Crea el pedido real en Supabase (pedidos + pedido_items) vía RPC. */
+async function confirmarPedido() {
+  if (_checkoutEnCurso) return;
   if (!cart.length) { showToast('Tu carrito está vacío', 'warning'); return; }
-  let lines = ['Hola, quiero hacer este pedido:', ''];
-  cart.forEach(item => {
-    const p = window._getProductById(item.id);
-    if (!p) return;
-    lines.push(`• ${p.nombre} x${item.qty} — ${formatCOP(p.precio * item.qty)}`);
-  });
-  lines.push('', `Total: ${formatCOP(cartTotal())}`);
-  const text = encodeURIComponent(lines.join('\n'));
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank');
+
+  if (!window.clienteListo || !clienteListo()) {
+    showToast('Inicia sesión y completa tu perfil para poder comprar', 'warning');
+    toggleCart(false);
+    goToPage('cuenta');
+    return;
+  }
+
+  _checkoutEnCurso = true;
+  showToast('Enviando pedido...', '');
+  try {
+    const { cliente } = getClienteActual();
+    const p_items = cart.map(item => ({ producto_id: item.id, cantidad: item.qty }));
+    const { data: pedido, error } = await window._sb.rpc('crear_pedido', {
+      p_cliente_id: cliente.id,
+      p_items
+    });
+    if (error) throw error;
+
+    cart = [];
+    saveCart();
+    updateCartUI();
+    toggleCart(false);
+    showToast(`Pedido #${pedido.numero_pedido} confirmado`, 'success');
+  } catch (e) {
+    console.error(e);
+    showToast(e.message || 'No se pudo crear el pedido. Intenta de nuevo.', 'error');
+  } finally {
+    _checkoutEnCurso = false;
+  }
 }
 
 window.cart = cart;
@@ -125,4 +148,4 @@ window.changeCartQty = changeCartQty;
 window.clearCart = clearCart;
 window.updateCartUI = updateCartUI;
 window.toggleCart = toggleCart;
-window.checkoutWhatsApp = checkoutWhatsApp;
+window.confirmarPedido = confirmarPedido;

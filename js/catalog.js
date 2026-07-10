@@ -1,6 +1,8 @@
 /* =====================================================================
-   CATALOG.JS — lee productos desde Firestore (colección "productos")
-   y renderiza el grid de la tienda + el modal de detalle.
+   CATALOG.JS — lee productos desde Supabase (tabla "productos") y
+   renderiza el grid de la tienda + el modal de detalle. Se suscribe a
+   cambios en tiempo real para que el stock se actualice para todos los
+   clientes sin recargar la página.
    Depende de ui.js (escapeHtml, formatCOP, showToast) y de cart.js
    (window.addToCart) ya cargados antes que este archivo.
 ===================================================================== */
@@ -22,22 +24,52 @@ const CATEGORY_ICONS = {
   default: 'ti-dental'
 };
 
+/** Adapta una fila de la tabla `productos` al formato que usa el catálogo. */
+function mapProductoRow(row) {
+  return { ...row, imagen: row.imagen_url };
+}
+
 async function loadProducts() {
   const grid = document.getElementById('productsGrid');
   if (!grid) return;
   grid.innerHTML = '<div class="empty-state"><i class="ti ti-loader-2"></i><p>Cargando productos...</p></div>';
   try {
-    const { collection, getDocs, query, orderBy } = window._fbFns;
-    const db = window._fbDb;
-    const q = query(collection(db, 'productos'), orderBy('creadoEn', 'desc'));
-    const snap = await getDocs(q);
-    allProducts = [];
-    snap.forEach(d => allProducts.push({ id: d.id, ...d.data() }));
+    const { data, error } = await window._sb
+      .from('productos')
+      .select('*')
+      .eq('activo', true)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    allProducts = data.map(mapProductoRow);
     renderCatalog();
+    subscribeToStockChanges();
   } catch (e) {
     console.error(e);
     grid.innerHTML = '<div class="empty-state"><i class="ti ti-alert-triangle"></i><p>No se pudieron cargar los productos. Intenta de nuevo más tarde.</p></div>';
   }
+}
+
+/** Escucha INSERT/UPDATE/DELETE en `productos` para reflejar stock e inventario en tiempo real. */
+function subscribeToStockChanges() {
+  if (window._productosChannel) return; // ya suscrito
+  window._productosChannel = window._sb
+    .channel('productos-realtime')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'productos' }, (payload) => {
+      if (payload.eventType === 'DELETE') {
+        allProducts = allProducts.filter(p => p.id !== payload.old.id);
+      } else {
+        const row = mapProductoRow(payload.new);
+        if (!row.activo) {
+          allProducts = allProducts.filter(p => p.id !== row.id);
+        } else {
+          const idx = allProducts.findIndex(p => p.id === row.id);
+          if (idx > -1) allProducts[idx] = row; else allProducts.unshift(row);
+        }
+      }
+      renderCatalog();
+      updateCartUI();
+    })
+    .subscribe();
 }
 
 function renderCatalog() {
@@ -45,7 +77,7 @@ function renderCatalog() {
   const label = document.getElementById('resultLabel');
   if (!grid) return;
 
-  let filtered = allProducts.filter(p => !p.oculto);
+  let filtered = allProducts.slice();
   if (activeCategory !== 'todos') filtered = filtered.filter(p => p.categoria === activeCategory);
   if (searchTerm.trim()) {
     const t = searchTerm.toLowerCase();

@@ -3,9 +3,6 @@
    (evento 'supabase-ready' disparado por supabase-config.js) están listos.
    El panel admin corre en modo demo (js/mock-data.js) y todavía no
    depende de Supabase, así que se inicializa de inmediato.
-   NOTA: loadProducts() (catalog.js) sigue escrito contra Firestore por
-   ahora — se reescribe en el próximo paso. Hasta entonces mostrará el
-   estado de error del catálogo, lo cual es esperado.
 ===================================================================== */
 
 if (document.getElementById('adminLoginBox')) initAdminAuth();
@@ -13,6 +10,7 @@ if (document.getElementById('adminLoginBox')) initAdminAuth();
 function initApp() {
   loadCart();
   loadProducts();
+  initClienteAuth();
   updateCartUI();
 }
 

@@ -49,6 +49,7 @@
         <span class="nav-cart-text">Carrito</span>
         <span class="cart-count" id="cartCount">0</span>
       </button>
+      <a class="nav-admin-link" id="navCuentaLink" onclick="goToPage('cuenta')">Mi cuenta</a>
       <a class="nav-admin-link" onclick="goToPage('admin')">Admin</a>
       <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menú">
         <span></span><span></span><span></span>
@@ -60,6 +61,7 @@
   <a onclick="goToPage('inicio')">Inicio</a>
   <a onclick="goToPage('tienda');renderCatalog()">Tienda</a>
   <a onclick="goToPage('contacto')">Contacto</a>
+  <a onclick="goToPage('cuenta')">Mi cuenta</a>
   <a onclick="goToPage('admin')">Admin</a>
 </div>
 
@@ -221,6 +223,58 @@
         <textarea id="contactoMensaje" rows="4" placeholder="¿En qué te podemos ayudar?"></textarea>
       </div>
       <button class="btn-primary btn-block" onclick="enviarContactoWhatsApp()"><i class="ti ti-brand-whatsapp"></i> Enviar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PAGE: CUENTA (login/registro/perfil de cliente) ============ -->
+<div class="page" id="page-cuenta">
+  <div class="admin-shell" style="max-width:460px;">
+    <div class="section-header">
+      <span class="eyebrow">Mi cuenta</span>
+      <h2 id="cuentaTitulo">Inicia sesión</h2>
+      <p id="cuentaSubtitulo">Inicia sesión para hacer pedidos y ver tu historial de compras.</p>
+    </div>
+
+    <!-- ESTADO: SIN SESIÓN -->
+    <div class="admin-form-card" id="cuentaLoginCard">
+      <div class="form-group">
+        <label>Correo</label>
+        <input type="email" id="cuentaEmail" placeholder="tucorreo@consultorio.com">
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="cuentaPassword" placeholder="••••••••">
+      </div>
+      <p class="form-hint" id="cuentaAuthMsg"></p>
+      <div style="display:flex;gap:10px;margin-top:8px;">
+        <button class="btn-primary" onclick="clienteIniciarSesion()">Ingresar</button>
+        <button class="btn-outline" onclick="clienteRegistrarse()">Crear cuenta</button>
+      </div>
+      <button class="btn-outline btn-block" style="margin-top:10px;" onclick="clienteLoginGoogle()"><i class="ti ti-brand-google"></i> Continuar con Google</button>
+    </div>
+
+    <!-- ESTADO: SESIÓN INICIADA, PERFIL INCOMPLETO -->
+    <div class="admin-form-card" id="cuentaPerfilCard" style="display:none;">
+      <h3>Completa tu perfil</h3>
+      <p class="form-hint" style="margin-bottom:var(--space-4);">Necesitamos estos datos para poder entregarte los pedidos.</p>
+      <div class="form-group"><label>Nombre completo</label><input type="text" id="cuentaNombre" placeholder="Dra. Nombre Apellido"></div>
+      <div class="form-group"><label>Teléfono</label><input type="text" id="cuentaTelefono" placeholder="300 123 4567"></div>
+      <div class="form-group"><label>Dirección de entrega</label><input type="text" id="cuentaDireccion" placeholder="Consultorio, dirección completa"></div>
+      <p class="form-hint" id="cuentaPerfilMsg"></p>
+      <button class="btn-primary btn-block" onclick="guardarPerfilCliente()">Guardar y continuar</button>
+    </div>
+
+    <!-- ESTADO: LISTO PARA COMPRAR -->
+    <div class="admin-form-card" id="cuentaListoCard" style="display:none;">
+      <h3>Hola, <span id="cuentaNombreListo"></span></h3>
+      <p class="form-hint" id="cuentaEmailListo"></p>
+      <p class="form-hint" id="cuentaTelefonoListo"></p>
+      <p class="form-hint" id="cuentaDireccionListo"></p>
+      <div style="display:flex;gap:10px;margin-top:var(--space-4);">
+        <button class="btn-primary" onclick="goToPage('tienda');renderCatalog()"><i class="ti ti-shopping-bag"></i> Ir a la tienda</button>
+        <button class="btn-outline" onclick="clienteCerrarSesion()"><i class="ti ti-logout"></i> Cerrar sesión</button>
+      </div>
     </div>
   </div>
 </div>
@@ -453,8 +507,8 @@
   <div class="cart-items-wrap" id="cartItemsWrap"></div>
   <div class="cart-footer">
     <div class="cart-subtotal"><span>Total</span><strong id="cartTotal">$0</strong></div>
-    <p class="cart-note-text">El pago y envío se coordinan directamente por WhatsApp al confirmar el pedido.</p>
-    <button class="wa-send-btn" onclick="checkoutWhatsApp()"><i class="ti ti-brand-whatsapp"></i> Confirmar por WhatsApp</button>
+    <p class="cart-note-text">Pago contra entrega. Al confirmar, el pedido queda registrado y te contactamos para coordinar la entrega.</p>
+    <button class="wa-send-btn" onclick="confirmarPedido()"><i class="ti ti-clipboard-check"></i> Confirmar pedido</button>
     <button class="cart-clear-btn" onclick="clearCart()">Vaciar carrito</button>
   </div>
 </div>
@@ -469,6 +523,7 @@
 <script src="js/supabase-config.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/mock-data.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/cart.js"></script>
 <script src="js/catalog.js"></script>
 <script src="js/admin.js"></script>
