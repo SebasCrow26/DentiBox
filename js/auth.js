@@ -52,6 +52,12 @@ async function onSesionCambio(session) {
   const adminLinkMobile = document.getElementById('navAdminLinkMobile');
   if (adminLinkMobile) adminLinkMobile.style.display = esAdmin() ? '' : 'none';
 
+  const navCuentaLink = document.getElementById('navCuentaLink');
+  const navCuentaLinkMobile = document.getElementById('navCuentaLinkMobile');
+  const cuentaLabel = _clienteState.user ? 'Mi cuenta' : 'Iniciar sesión';
+  if (navCuentaLink) navCuentaLink.textContent = cuentaLabel;
+  if (navCuentaLinkMobile) navCuentaLinkMobile.textContent = cuentaLabel;
+
   renderCuentaPage();
   updateCartUI();
   window.renderAdminGate && window.renderAdminGate();
