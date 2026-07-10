@@ -22,7 +22,7 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2/dist/tabler-icons.min.css"/>
 <link rel="stylesheet" href="css/styles.css"/>
 </head>
@@ -40,7 +40,7 @@
     </a>
     <ul class="nav-links">
       <li><a data-page="inicio" onclick="goToPage('inicio')" class="active">Inicio</a></li>
-      <li><a data-page="tienda" onclick="goToPage('tienda');renderCatalog()">Tienda</a></li>
+      <li><a data-page="tienda" onclick="goToPage('tienda');renderCatalog()">Catálogo</a></li>
       <li><a data-page="contacto" onclick="goToPage('contacto')">Contacto</a></li>
     </ul>
     <div class="nav-right">
@@ -49,7 +49,7 @@
         <span class="nav-cart-text">Carrito</span>
         <span class="cart-count" id="cartCount">0</span>
       </button>
-      <a class="nav-admin-link" id="navCuentaLink" onclick="goToPage('cuenta')">Mi cuenta</a>
+      <a class="nav-login-btn" id="navCuentaLink" onclick="goToPage('cuenta')">Mi cuenta</a>
       <a class="nav-admin-link" id="navAdminLink" onclick="goToPage('admin')" style="display:none;">Admin</a>
       <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menú">
         <span></span><span></span><span></span>
@@ -59,7 +59,7 @@
 </nav>
 <div class="mobile-menu" id="mobileMenu">
   <a onclick="goToPage('inicio')">Inicio</a>
-  <a onclick="goToPage('tienda');renderCatalog()">Tienda</a>
+  <a onclick="goToPage('tienda');renderCatalog()">Catálogo</a>
   <a onclick="goToPage('contacto')">Contacto</a>
   <a onclick="goToPage('cuenta')">Mi cuenta</a>
   <a id="navAdminLinkMobile" onclick="goToPage('admin')" style="display:none;">Admin</a>
@@ -69,32 +69,27 @@
 <div class="page active" id="page-inicio">
 
   <section class="hero">
+    <div class="hero-glow"></div>
     <div class="hero-inner">
       <div class="hero-text">
-        <span class="hero-eyebrow">Distribuidor autorizado</span>
-        <h1 class="hero-title">Insumos odontológicos, <em>listos para tu bandeja.</em></h1>
-        <p class="hero-desc">Restauración, ortodoncia, bioseguridad e instrumental de marcas certificadas. Pides por WhatsApp y despachamos en 24–48h.</p>
+        <h1 class="hero-title">Insumos dentales,<br><em>sin complicaciones.</em></h1>
+        <p class="hero-desc">El depósito dental digital de tu consultorio: pide contra entrega, elige entre nuestro catálogo completo de insumos y recibe donde estés, sin adelantos ni vueltas.</p>
         <div class="hero-actions">
-          <button class="btn-primary" onclick="goToPage('tienda');renderCatalog()"><i class="ti ti-shopping-bag"></i> Ver catálogo</button>
-          <a class="btn-outline" href="https://wa.me/573107992293" target="_blank" rel="noopener"><i class="ti ti-brand-whatsapp"></i> Escribir por WhatsApp</a>
-        </div>
-        <div class="hero-meta">
-          <div class="hmeta-item"><span class="n">+300</span><span class="l">referencias</span></div>
-          <div class="hmeta-item"><span class="n">24–48h</span><span class="l">entrega</span></div>
-          <div class="hmeta-item"><span class="n">100%</span><span class="l">originales</span></div>
+          <button class="btn-primary" onclick="goToPage('tienda');renderCatalog()"><i class="ti ti-shopping-bag"></i> Explorar catálogo</button>
+          <a class="btn-outline" href="#como-funciona" onclick="goToPage('inicio')">Cómo funciona</a>
         </div>
       </div>
-      <div class="hero-tray">
-        <div class="tray-card">
-          <div class="tray-label"><span>Bandeja</span><span>N.º 01</span></div>
-          <div class="tray-grid">
-            <div class="tray-slot"><i class="ti ti-flask"></i><span class="ref">RST-01</span></div>
-            <div class="tray-slot"><i class="ti ti-align-center"></i><span class="ref">ORT-02</span></div>
-            <div class="tray-slot"><i class="ti ti-shield-check"></i><span class="ref">BIO-03</span></div>
-            <div class="tray-slot"><i class="ti ti-tool"></i><span class="ref">INS-04</span></div>
-            <div class="tray-slot"><i class="ti ti-file-analytics"></i><span class="ref">END-05</span></div>
-            <div class="tray-slot"><i class="ti ti-package"></i><span class="ref">CON-06</span></div>
+      <div class="hero-visual">
+        <div class="hero-blob hero-blob-1"></div>
+        <div class="hero-blob hero-blob-2"></div>
+        <div class="hero-card">
+          <div class="hero-card-top">
+            <span>Tienda DentiBox</span>
+            <span class="hero-card-dot"></span>
           </div>
+          <div class="hero-card-preview"><span>vista previa · catálogo</span></div>
+          <div class="hero-card-line" style="width:80%;"></div>
+          <div class="hero-card-line" style="width:55%;"></div>
         </div>
       </div>
     </div>
@@ -102,75 +97,101 @@
 
   <section class="features">
     <div class="features-inner">
-      <div class="section-header">
-        <span class="eyebrow">Por qué DentiBox</span>
-        <h2>Pensado para el ritmo de tu consultorio</h2>
-      </div>
       <div class="features-grid">
         <div class="feat-card">
-          <div class="idx mono">01</div>
-          <h3>Stock verificado</h3>
-          <p>Inventario real, sin sobreventas. Lo que ves disponible, lo despachamos.</p>
+          <div class="feat-icon"><i class="ti ti-truck-delivery"></i></div>
+          <h3>Pedido contra entrega</h3>
+          <p>Pide tus insumos y paga cuando los recibes, sin adelantos ni complicaciones.</p>
         </div>
         <div class="feat-card">
-          <div class="idx mono">02</div>
-          <h3>Productos originales</h3>
-          <p>Trabajamos directo con distribuidores autorizados de cada marca.</p>
+          <div class="feat-icon"><i class="ti ti-list-details"></i></div>
+          <h3>Catálogo completo</h3>
+          <p>Instrumental, materiales de restauración, bioseguridad y equipos en un solo lugar.</p>
         </div>
         <div class="feat-card">
-          <div class="idx mono">03</div>
-          <h3>Pedido por WhatsApp</h3>
-          <p>Sin registros largos: arma tu carrito y confirma en un chat.</p>
+          <div class="feat-icon"><i class="ti ti-packages"></i></div>
+          <h3>Stock siempre disponible</h3>
+          <p>Inventario real y en vivo, para que tus pedidos nunca queden sin stock.</p>
         </div>
         <div class="feat-card">
-          <div class="idx mono">04</div>
-          <h3>Entrega 24–48h</h3>
-          <p>Despacho ágil a tu consultorio en las principales ciudades.</p>
+          <div class="feat-icon"><i class="ti ti-bolt"></i></div>
+          <h3>Entrega rápida</h3>
+          <p>Recibe tus pedidos directo en el consultorio, sin perder tiempo de consulta.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="steps">
-    <div class="steps-inner">
+  <section class="categories" id="categorias">
+    <div class="categories-inner">
       <div class="section-header">
+        <span class="eyebrow">Catálogo</span>
+        <h2>Todo lo que tu consultorio necesita</h2>
+        <p>Explora nuestras categorías y arma tu pedido en minutos.</p>
+      </div>
+      <div class="categories-grid">
+        <div class="cat-card" onclick="goToPage('tienda');renderCatalog();setActiveCategory('restauracion',document.querySelector('[data-cat=restauracion]'))">
+          <div class="cat-stripe cat-stripe-1"><i class="ti ti-flask"></i></div>
+          <div class="cat-body"><h3>Restauración</h3><p>Resinas, cementos y adhesivos.</p></div>
+        </div>
+        <div class="cat-card" onclick="goToPage('tienda');renderCatalog();setActiveCategory('ortodoncia',document.querySelector('[data-cat=ortodoncia]'))">
+          <div class="cat-stripe cat-stripe-2"><i class="ti ti-align-center"></i></div>
+          <div class="cat-body"><h3>Ortodoncia</h3><p>Brackets, arcos y ligas.</p></div>
+        </div>
+        <div class="cat-card" onclick="goToPage('tienda');renderCatalog();setActiveCategory('bioseguridad',document.querySelector('[data-cat=bioseguridad]'))">
+          <div class="cat-stripe cat-stripe-3"><i class="ti ti-shield-check"></i></div>
+          <div class="cat-body"><h3>Bioseguridad</h3><p>Guantes, mascarillas y desinfección.</p></div>
+        </div>
+        <div class="cat-card" onclick="goToPage('tienda');renderCatalog();setActiveCategory('instrumental',document.querySelector('[data-cat=instrumental]'))">
+          <div class="cat-stripe cat-stripe-4"><i class="ti ti-tool"></i></div>
+          <div class="cat-body"><h3>Instrumental</h3><p>Fresas, espejos, pinzas y más.</p></div>
+        </div>
+        <div class="cat-card" onclick="goToPage('tienda');renderCatalog();setActiveCategory('endodoncia',document.querySelector('[data-cat=endodoncia]'))">
+          <div class="cat-stripe cat-stripe-5"><i class="ti ti-file-analytics"></i></div>
+          <div class="cat-body"><h3>Endodoncia</h3><p>Limas, conos y selladores.</p></div>
+        </div>
+        <div class="cat-card" onclick="goToPage('tienda');renderCatalog();setActiveCategory('consumibles',document.querySelector('[data-cat=consumibles]'))">
+          <div class="cat-stripe cat-stripe-6"><i class="ti ti-package"></i></div>
+          <div class="cat-body"><h3>Consumibles</h3><p>Piezas de mano, agujas y anestesia.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="steps" id="como-funciona">
+    <div class="steps-inner">
+      <div class="section-header text-center">
         <span class="eyebrow">Cómo funciona</span>
-        <h2>De la bandeja a tu puerta</h2>
+        <h2>Pedir nunca fue tan simple</h2>
       </div>
       <div class="steps-grid">
-        <div class="step"><div class="num mono">01</div><h4>Explora el catálogo</h4><p>Filtra por categoría o busca la referencia que necesitas.</p></div>
-        <div class="step"><div class="num mono">02</div><h4>Arma tu pedido</h4><p>Agrega productos al carrito y ajusta cantidades.</p></div>
-        <div class="step"><div class="num mono">03</div><h4>Confirma por WhatsApp</h4><p>Enviamos el resumen automáticamente al chat.</p></div>
-        <div class="step"><div class="num mono">04</div><h4>Recibe en 24–48h</h4><p>Coordinamos el pago y el envío directo por WhatsApp.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="testimonials">
-    <div class="testimonials-inner">
-      <div class="section-header">
-        <span class="eyebrow">Testimonios</span>
-        <h2>Consultorios que ya piden con nosotros</h2>
-      </div>
-      <div class="t-card">
-        <blockquote>"Dejé de perder tiempo comparando proveedores. En DentiBox encuentro todo lo que necesito para el mes en una sola compra."</blockquote>
-        <div class="t-author">Dra. Camila Rueda <span>· Consultorio Sonrisa Sana</span></div>
+        <div class="step"><div class="step-num">1</div><h4>Explora el catálogo</h4><p>Encuentra tus insumos por categoría en segundos.</p></div>
+        <div class="step"><div class="step-num">2</div><h4>Haz tu pedido</h4><p>Arma tu carrito y confírmalo en el momento.</p></div>
+        <div class="step"><div class="step-num">3</div><h4>Recibe en tu consultorio</h4><p>Te lo llevamos directo a tu puerta.</p></div>
+        <div class="step"><div class="step-num">4</div><h4>Paga contra entrega</h4><p>Sin adelantos: pagas cuando lo recibes.</p></div>
       </div>
     </div>
   </section>
 
   <section class="cta-strip">
-    <h2>¿Listo para hacer tu pedido?</h2>
-    <p>Explora el catálogo completo o escríbenos directo.</p>
-    <button class="btn-primary" onclick="goToPage('tienda');renderCatalog()"><i class="ti ti-shopping-bag"></i> Ir a la tienda</button>
+    <div class="cta-banner">
+      <div class="cta-blob cta-blob-1"></div>
+      <div class="cta-blob cta-blob-2"></div>
+      <div class="cta-banner-content">
+        <h2>Empieza a pedir hoy mismo</h2>
+        <p>Sin adelantos, sin vueltas. Solo insumos dentales, entregados a tu puerta.</p>
+        <button class="btn-cta-white" onclick="goToPage('cuenta')">Crear cuenta gratis</button>
+      </div>
+    </div>
   </section>
 
   <footer>
     <div class="footer-inner">
+      <span class="nav-logo-mark">D+</span>
       <p>© 2026 DentiBox. Todos los derechos reservados.</p>
       <div class="footer-links">
+        <a onclick="goToPage('tienda');renderCatalog()">Catálogo</a>
         <a onclick="goToPage('contacto')">Contacto</a>
-        <a href="https://wa.me/573107992293" target="_blank" rel="noopener">WhatsApp</a>
       </div>
     </div>
   </footer>
@@ -191,13 +212,13 @@
         <input type="text" placeholder="Buscar producto..." oninput="handleSearch(this.value)">
       </div>
       <div class="filter-btns">
-        <button class="filter-btn active" onclick="setActiveCategory('todos',this)">Todos</button>
-        <button class="filter-btn" onclick="setActiveCategory('restauracion',this)">Restauración</button>
-        <button class="filter-btn" onclick="setActiveCategory('ortodoncia',this)">Ortodoncia</button>
-        <button class="filter-btn" onclick="setActiveCategory('bioseguridad',this)">Bioseguridad</button>
-        <button class="filter-btn" onclick="setActiveCategory('instrumental',this)">Instrumental</button>
-        <button class="filter-btn" onclick="setActiveCategory('endodoncia',this)">Endodoncia</button>
-        <button class="filter-btn" onclick="setActiveCategory('consumibles',this)">Consumibles</button>
+        <button class="filter-btn active" data-cat="todos" onclick="setActiveCategory('todos',this)">Todos</button>
+        <button class="filter-btn" data-cat="restauracion" onclick="setActiveCategory('restauracion',this)">Restauración</button>
+        <button class="filter-btn" data-cat="ortodoncia" onclick="setActiveCategory('ortodoncia',this)">Ortodoncia</button>
+        <button class="filter-btn" data-cat="bioseguridad" onclick="setActiveCategory('bioseguridad',this)">Bioseguridad</button>
+        <button class="filter-btn" data-cat="instrumental" onclick="setActiveCategory('instrumental',this)">Instrumental</button>
+        <button class="filter-btn" data-cat="endodoncia" onclick="setActiveCategory('endodoncia',this)">Endodoncia</button>
+        <button class="filter-btn" data-cat="consumibles" onclick="setActiveCategory('consumibles',this)">Consumibles</button>
       </div>
     </div>
     <p class="result-label" id="resultLabel">Cargando...</p>
