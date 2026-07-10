@@ -84,6 +84,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:68px;background:rgba
 .nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;}
 .nav-logo-img{height:clamp(40px,6vw,54px);width:auto;display:block;}
 .footer-logo-img{height:38px;width:auto;opacity:0.9;}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:40px 5%;}
+.footer-inner p{color:var(--muted);font-size:0.9rem;}
+.footer-links{display:flex;gap:14px;flex-wrap:wrap;}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:0.92rem;}
+.footer-socials{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-social{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;font-weight:600;font-size:0.88rem;text-decoration:none;color:#fff;transition:all 0.2s var(--ease);}
+.btn-social:hover{transform:translateY(-1px);}
+.btn-instagram{background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af,#515bd4);}
+.btn-facebook{background:#1877F2;}
+
 .nav-links{display:flex;gap:0.4rem;list-style:none;align-items:center;}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:0.83rem;font-weight:500;padding:8px 14px;border-radius:var(--radius-pill);transition:all 0.2s var(--ease);cursor:pointer;display:block;}
 .nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--bg-soft);}
