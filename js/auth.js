@@ -33,6 +33,14 @@ async function initClienteAuth() {
   });
 }
 
+async function actualizarCuentaNavLabel() {
+  const label = _clienteState.user ? 'Mi cuenta' : 'Iniciar sesión';
+  const navCuentaLink = document.getElementById('navCuentaLink');
+  const navCuentaLinkMobile = document.getElementById('navCuentaLinkMobile');
+  if (navCuentaLink) navCuentaLink.textContent = label;
+  if (navCuentaLinkMobile) navCuentaLinkMobile.textContent = label;
+}
+
 async function onSesionCambio(session) {
   _clienteState.user = session ? session.user : null;
   _clienteState.cliente = null;
@@ -52,11 +60,7 @@ async function onSesionCambio(session) {
   const adminLinkMobile = document.getElementById('navAdminLinkMobile');
   if (adminLinkMobile) adminLinkMobile.style.display = esAdmin() ? '' : 'none';
 
-  const navCuentaLink = document.getElementById('navCuentaLink');
-  const navCuentaLinkMobile = document.getElementById('navCuentaLinkMobile');
-  const cuentaLabel = _clienteState.user ? 'Mi cuenta' : 'Iniciar sesión';
-  if (navCuentaLink) navCuentaLink.textContent = cuentaLabel;
-  if (navCuentaLinkMobile) navCuentaLinkMobile.textContent = cuentaLabel;
+  actualizarCuentaNavLabel();
 
   renderCuentaPage();
   updateCartUI();
@@ -108,6 +112,8 @@ async function clienteLoginGoogle() {
 async function clienteCerrarSesion() {
   await window._sb.auth.signOut();
   _clienteEditando = false;
+  _clienteState.user = null;
+  actualizarCuentaNavLabel();
   showToast('Sesión cerrada', 'success');
   goToPage('inicio');
 }
@@ -277,7 +283,7 @@ function renderCuentaPage() {
     loginCard.style.display = 'block';
     titulo.textContent = 'Inicia sesión';
     subtitulo.textContent = 'Inicia sesión para hacer pedidos y ver tu historial de compras.';
-    if (navLink) navLink.textContent = 'Mi cuenta';
+    if (navLink) navLink.textContent = 'Iniciar sesión';
   } else if (!clienteListo() || _clienteEditando) {
     perfilCard.style.display = 'block';
     if (!clienteListo()) {
