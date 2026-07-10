@@ -300,7 +300,12 @@ footer{padding:var(--space-10) 5%;border-top:1px solid var(--border);}
 .admin-panel{display:none;}
 .admin-panel.active{display:block;}
 .admin-form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--space-6);margin-bottom:var(--space-6);}
-.admin-form-card h3{font-size:1.02rem;margin-bottom:var(--space-4);}
+.admin-form-card h3{font-size:1.02rem;margin-bottom:var(--space-4);}304:.map-preview{width:100%;min-height:240px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);margin-top:10px;}
+305:.account-map-card{margin-top:20px;}
+306:.account-map-card .map-preview{min-height:220px;}
+307:.address-preview{background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:14px;min-height:66px;display:flex;align-items:center;}
+308:.address-preview p{margin:0;color:var(--muted);font-size:0.9rem;}
+309:.btn-block{width:100%;justify-content:center;}
 .admin-table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-lg);}
 table{width:100%;border-collapse:collapse;font-size:0.83rem;}
 th{text-align:left;padding:11px 16px;background:var(--bg-soft);font-weight:600;color:var(--muted);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid var(--border);}

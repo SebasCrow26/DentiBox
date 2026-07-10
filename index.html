@@ -237,13 +237,27 @@
 
     <!-- ESTADO: SESIÓN INICIADA, PERFIL INCOMPLETO -->
     <div class="admin-form-card" id="cuentaPerfilCard" style="display:none;">
-      <h3>Completa tu perfil</h3>
-      <p class="form-hint" style="margin-bottom:var(--space-4);">Necesitamos estos datos para poder entregarte los pedidos.</p>
+      <h3 id="cuentaPerfilTitulo">Completa tu perfil</h3>
+      <p class="form-hint" id="cuentaPerfilSubtitulo" style="margin-bottom:var(--space-4);">Necesitamos estos datos para poder entregarte los pedidos.</p>
       <div class="form-group"><label>Nombre completo</label><input type="text" id="cuentaNombre" placeholder="Dra. Nombre Apellido"></div>
       <div class="form-group"><label>Teléfono</label><input type="text" id="cuentaTelefono" placeholder="300 123 4567"></div>
-      <div class="form-group"><label>Dirección de entrega</label><input type="text" id="cuentaDireccion" placeholder="Consultorio, dirección completa"></div>
+      <div class="form-group"><label>Dirección de entrega</label><input type="text" id="cuentaDireccion" placeholder="Consultorio, dirección completa" oninput="actualizarVistaDireccion()"></div>
+      <div class="form-group">
+        <label>Vista previa de la dirección</label>
+        <div class="address-preview" id="cuentaDireccionPreview">
+          <p class="form-hint">Escribe tu dirección para ver una vista previa en Google Maps.</p>
+        </div>
+        <iframe id="cuentaDireccionMapa" class="map-preview" src="" style="display:none;" loading="lazy"></iframe>
+        <a id="cuentaDireccionMapsLink" class="btn-outline btn-block" style="display:none;margin-top:10px;" target="_blank" rel="noopener noreferrer">Abrir en Google Maps</a>
+      </div>
       <p class="form-hint" id="cuentaPerfilMsg"></p>
-      <button class="btn-primary btn-block" onclick="guardarPerfilCliente()">Guardar y continuar</button>
+      <div style="display:grid;gap:10px;margin-top:10px;">
+        <button class="btn-primary btn-block" onclick="guardarPerfilCliente()">Guardar y continuar</button>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;">
+          <button class="btn-outline btn-block" onclick="clienteCerrarSesion()"><i class="ti ti-logout"></i> Cerrar sesión</button>
+          <button class="btn-outline btn-block" id="cuentaPerfilCancelarBtn" onclick="cancelarEditarPerfilCliente()" style="display:none;">Cancelar</button>
+        </div>
+      </div>
     </div>
 
     <!-- ESTADO: LISTO PARA COMPRAR -->
@@ -252,7 +266,12 @@
       <p class="form-hint" id="cuentaEmailListo"></p>
       <p class="form-hint" id="cuentaTelefonoListo"></p>
       <p class="form-hint" id="cuentaDireccionListo"></p>
-      <div style="display:flex;gap:10px;margin-top:var(--space-4);">
+      <div class="account-map-card" id="cuentaListoMapaWrap" style="display:none;">
+        <iframe id="cuentaListoMapa" class="map-preview" src="" loading="lazy"></iframe>
+        <a id="cuentaListoMapsLink" class="btn-outline btn-block" target="_blank" rel="noopener noreferrer">Ver en Google Maps</a>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:var(--space-4);flex-wrap:wrap;">
+        <button class="btn-primary" onclick="abrirEditarPerfilCliente()"><i class="ti ti-edit"></i> Editar datos</button>
         <button class="btn-primary" onclick="goToPage('tienda')"><i class="ti ti-shopping-bag"></i> Ir a la tienda</button>
         <button class="btn-outline" onclick="clienteCerrarSesion()"><i class="ti ti-logout"></i> Cerrar sesión</button>
       </div>

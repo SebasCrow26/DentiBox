@@ -18,6 +18,7 @@
 const ADMIN_EMAIL = 'sebastian.ramos26122005@gmail.com';
 
 let _clienteState = { user: null, cliente: null };
+let _clienteEditando = false;
 
 function esAdmin() {
   return !!(_clienteState.user && _clienteState.user.email === ADMIN_EMAIL);
@@ -100,8 +101,63 @@ async function clienteLoginGoogle() {
 
 async function clienteCerrarSesion() {
   await window._sb.auth.signOut();
+  _clienteEditando = false;
   showToast('Sesión cerrada', 'success');
   goToPage('inicio');
+}
+
+function abrirEditarPerfilCliente() {
+  _clienteEditando = true;
+  renderCuentaPage();
+}
+
+function cancelarEditarPerfilCliente() {
+  _clienteEditando = false;
+  renderCuentaPage();
+}
+
+function actualizarVistaDireccion() {
+  const direccion = document.getElementById('cuentaDireccion')?.value.trim();
+  const preview = document.getElementById('cuentaDireccionPreview');
+  const iframe = document.getElementById('cuentaDireccionMapa');
+  const mapsLink = document.getElementById('cuentaDireccionMapsLink');
+  if (!preview || !iframe || !mapsLink) return;
+
+  if (!direccion) {
+    preview.innerHTML = '<p class="form-hint">Escribe tu dirección para ver una vista previa en Google Maps.</p>';
+    iframe.style.display = 'none';
+    mapsLink.style.display = 'none';
+    iframe.src = '';
+    mapsLink.href = '#';
+    return;
+  }
+
+  preview.textContent = 'Vista previa en Google Maps. Si el mapa no carga, abre el enlace.';
+  const query = encodeURIComponent(direccion);
+  iframe.src = `https://maps.google.com/maps?q=${query}&z=15&output=embed`;
+  iframe.style.display = 'block';
+  mapsLink.href = `https://www.google.com/maps/search/?api=1&query=${query}`;
+  mapsLink.style.display = 'inline-flex';
+}
+
+function actualizarMapaClienteListo() {
+  const direccion = _clienteState.cliente?.direccion?.trim();
+  const mapaWrap = document.getElementById('cuentaListoMapaWrap');
+  const iframe = document.getElementById('cuentaListoMapa');
+  const mapsLink = document.getElementById('cuentaListoMapsLink');
+  if (!mapaWrap || !iframe || !mapsLink) return;
+
+  if (!direccion) {
+    mapaWrap.style.display = 'none';
+    iframe.src = '';
+    mapsLink.href = '#';
+    return;
+  }
+
+  const query = encodeURIComponent(direccion);
+  mapaWrap.style.display = 'block';
+  iframe.src = `https://maps.google.com/maps?q=${query}&z=15&output=embed`;
+  mapsLink.href = `https://www.google.com/maps/search/?api=1&query=${query}`;
 }
 
 /* ============================================================
@@ -135,6 +191,7 @@ async function guardarPerfilCliente() {
   if (error) { msgEl.textContent = error.message; return; }
   msgEl.textContent = '';
   _clienteState.cliente = data;
+  _clienteEditando = false;
   showToast('Perfil guardado', 'success');
   renderCuentaPage();
   updateCartUI();
@@ -156,16 +213,34 @@ function renderCuentaPage() {
   perfilCard.style.display = 'none';
   listoCard.style.display = 'none';
 
+  function prefillPerfilInputs() {
+    const nombreEl = document.getElementById('cuentaNombre');
+    const telefonoEl = document.getElementById('cuentaTelefono');
+    const direccionEl = document.getElementById('cuentaDireccion');
+    if (!nombreEl || !telefonoEl || !direccionEl) return;
+    nombreEl.value = _clienteState.cliente?.nombre || '';
+    telefonoEl.value = _clienteState.cliente?.telefono || '';
+    direccionEl.value = _clienteState.cliente?.direccion || '';
+    actualizarVistaDireccion();
+  }
+
   if (!_clienteState.user) {
     loginCard.style.display = 'block';
     titulo.textContent = 'Inicia sesión';
     subtitulo.textContent = 'Inicia sesión para hacer pedidos y ver tu historial de compras.';
     if (navLink) navLink.textContent = 'Mi cuenta';
-  } else if (!clienteListo()) {
+  } else if (!clienteListo() || _clienteEditando) {
     perfilCard.style.display = 'block';
-    titulo.textContent = 'Completa tu perfil';
-    subtitulo.textContent = 'Un último paso antes de poder comprar.';
-    if (navLink) navLink.textContent = 'Mi cuenta';
+    if (!clienteListo()) {
+      titulo.textContent = 'Completa tu perfil';
+      subtitulo.textContent = 'Un último paso antes de poder comprar.';
+      _clienteEditando = true;
+      if (navLink) navLink.textContent = 'Mi cuenta';
+    } else {
+      titulo.textContent = 'Editar datos';
+      subtitulo.textContent = 'Actualiza tu información y revisa tu dirección en el mapa.';
+      if (navLink) navLink.textContent = _clienteState.cliente.nombre.split(' ')[0];
+    }
   } else {
     listoCard.style.display = 'block';
     titulo.textContent = 'Mi cuenta';
@@ -176,6 +251,19 @@ function renderCuentaPage() {
     document.getElementById('cuentaDireccionListo').textContent = _clienteState.cliente.direccion || '—';
     if (navLink) navLink.textContent = _clienteState.cliente.nombre.split(' ')[0];
   }
+
+  const cancelarBtn = document.getElementById('cuentaPerfilCancelarBtn');
+  if (cancelarBtn) {
+    cancelarBtn.style.display = (_clienteEditando && clienteListo()) ? 'inline-flex' : 'none';
+  }
+
+  if (perfilCard.style.display === 'block') {
+    prefillPerfilInputs();
+  }
+
+  if (listoCard.style.display === 'block') {
+    actualizarMapaClienteListo();
+  }
 }
 
 window.initClienteAuth = initClienteAuth;
@@ -185,6 +273,9 @@ window.clienteIniciarSesion = clienteIniciarSesion;
 window.clienteRegistrarse = clienteRegistrarse;
 window.clienteLoginGoogle = clienteLoginGoogle;
 window.clienteCerrarSesion = clienteCerrarSesion;
+window.abrirEditarPerfilCliente = abrirEditarPerfilCliente;
+window.cancelarEditarPerfilCliente = cancelarEditarPerfilCliente;
+window.actualizarVistaDireccion = actualizarVistaDireccion;
 window.guardarPerfilCliente = guardarPerfilCliente;
 window.renderCuentaPage = renderCuentaPage;
 window.esAdmin = esAdmin;
