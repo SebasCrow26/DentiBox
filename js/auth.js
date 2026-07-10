@@ -123,7 +123,9 @@ function cancelarEditarPerfilCliente() {
 }
 
 function actualizarVistaDireccion() {
+  const consultorio = document.getElementById('cuentaConsultorio')?.value.trim();
   const direccion = document.getElementById('cuentaDireccion')?.value.trim();
+  const fullAddress = [consultorio, direccion].filter(Boolean).join(' · ');
   const preview = document.getElementById('cuentaDireccionPreview');
   const iframe = document.getElementById('cuentaDireccionMapa');
   const mapsLink = document.getElementById('cuentaDireccionMapsLink');
@@ -139,7 +141,7 @@ function actualizarVistaDireccion() {
   }
 
   preview.textContent = 'Vista previa en Google Maps. Si el mapa no carga, abre el enlace.';
-  const query = encodeURIComponent(direccion);
+  const query = encodeURIComponent(fullAddress);
   iframe.src = `https://maps.google.com/maps?q=${query}&z=15&output=embed`;
   iframe.style.display = 'block';
   mapsLink.href = `https://www.google.com/maps/search/?api=1&query=${query}`;
@@ -172,6 +174,7 @@ function actualizarMapaClienteListo() {
 async function guardarPerfilCliente() {
   const nombre = document.getElementById('cuentaNombre').value.trim();
   const telefono = document.getElementById('cuentaTelefono').value.trim();
+  const consultorio = document.getElementById('cuentaConsultorio').value.trim();
   const direccion = document.getElementById('cuentaDireccion').value.trim();
   const msgEl = document.getElementById('cuentaPerfilMsg');
 
@@ -181,6 +184,7 @@ async function guardarPerfilCliente() {
   }
   if (!_clienteState.user) { msgEl.textContent = 'Tu sesión expiró, vuelve a iniciar sesión.'; return; }
 
+  const direccionFull = [consultorio, direccion].filter(Boolean).join(' · ');
   msgEl.textContent = 'Guardando...';
   const { data, error } = await window._sb
     .from('clientes')
@@ -188,7 +192,7 @@ async function guardarPerfilCliente() {
       auth_user_id: _clienteState.user.id,
       nombre,
       telefono,
-      direccion,
+      direccion: direccionFull,
       email: _clienteState.user.email
     }, { onConflict: 'auth_user_id' })
     .select()
@@ -222,11 +226,20 @@ function renderCuentaPage() {
   function prefillPerfilInputs() {
     const nombreEl = document.getElementById('cuentaNombre');
     const telefonoEl = document.getElementById('cuentaTelefono');
+    const consultorioEl = document.getElementById('cuentaConsultorio');
     const direccionEl = document.getElementById('cuentaDireccion');
-    if (!nombreEl || !telefonoEl || !direccionEl) return;
+    if (!nombreEl || !telefonoEl || !consultorioEl || !direccionEl) return;
     nombreEl.value = _clienteState.cliente?.nombre || '';
     telefonoEl.value = _clienteState.cliente?.telefono || '';
-    direccionEl.value = _clienteState.cliente?.direccion || '';
+    const savedDireccion = _clienteState.cliente?.direccion || '';
+    const parts = savedDireccion.split(' · ');
+    if (parts.length > 1) {
+      consultorioEl.value = parts[0];
+      direccionEl.value = parts.slice(1).join(' · ');
+    } else {
+      consultorioEl.value = '';
+      direccionEl.value = savedDireccion;
+    }
     actualizarVistaDireccion();
   }
 

@@ -292,7 +292,12 @@ footer{padding:var(--space-10) 5%;border-top:1px solid var(--border);}
 .admin-login-box{max-width:380px;margin:var(--space-20) auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--space-8);box-shadow:var(--shadow-sm);}
 .admin-login-box h2{font-size:1.25rem;margin-bottom:var(--space-2);}
 .admin-login-box p{color:var(--muted);font-size:0.85rem;margin-bottom:var(--space-6);line-height:1.6;}
-.admin-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-6);flex-wrap:wrap;gap:12px;}
+.admin-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-6);flex-wrap:wrap;gap:12px;}#page-cuenta .admin-shell{max-width:860px;}
+#page-cuenta .admin-form-card{max-width:760px;margin:0 auto;}
+.map-preview{width:100%;min-height:360px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);margin-top:10px;}
+.account-map-card .map-preview{min-height:360px;}
+.address-preview{background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:14px;min-height:76px;display:flex;align-items:center;}
+.address-preview p{margin:0;color:var(--muted);font-size:0.95rem;}
 .admin-header h1{font-size:1.45rem;}
 .admin-tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:var(--space-6);overflow-x:auto;}
 .admin-tab{background:none;border:none;padding:11px 18px;font-size:0.85rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color 0.15s;}

@@ -6,7 +6,7 @@
 
 <!-- SECURITY HEADERS (CSP vía meta — complementa con headers HTTP en tu hosting si puedes) -->
 <meta http-equiv="Content-Security-Policy"
-  content="default-src 'self' https:; script-src 'self' https://cdn.jsdelivr.net; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https:; connect-src 'self' https://jhmqvuxarimkndrpdlbf.supabase.co wss://jhmqvuxarimkndrpdlbf.supabase.co https://api.cloudinary.com; frame-src 'none'; object-src 'none'; base-uri 'self';">
+  content="default-src 'self' https:; script-src 'self' https://cdn.jsdelivr.net; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://jhmqvuxarimkndrpdlbf.supabase.co wss://jhmqvuxarimkndrpdlbf.supabase.co https://api.cloudinary.com; frame-src https://maps.google.com; object-src 'none'; base-uri 'self';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 
@@ -210,7 +210,7 @@
 
 <!-- ============ PAGE: CUENTA (login/registro/perfil de cliente) ============ -->
 <div class="page" id="page-cuenta">
-  <div class="admin-shell" style="max-width:460px;">
+  <div class="admin-shell">
     <div class="section-header">
       <span class="eyebrow">Mi cuenta</span>
       <h2 id="cuentaTitulo">Inicia sesión</h2>
@@ -241,11 +241,12 @@
       <p class="form-hint" id="cuentaPerfilSubtitulo" style="margin-bottom:var(--space-4);">Necesitamos estos datos para poder entregarte los pedidos.</p>
       <div class="form-group"><label>Nombre completo</label><input type="text" id="cuentaNombre" placeholder="Dra. Nombre Apellido"></div>
       <div class="form-group"><label>Teléfono</label><input type="text" id="cuentaTelefono" placeholder="300 123 4567"></div>
-      <div class="form-group"><label>Dirección de entrega</label><input type="text" id="cuentaDireccion" placeholder="Consultorio, dirección completa" oninput="actualizarVistaDireccion()"></div>
+      <div class="form-group"><label>Consultorio (opcional)</label><input type="text" id="cuentaConsultorio" placeholder="Nombre del consultorio"></div>
+      <div class="form-group"><label>Dirección de entrega</label><input type="text" id="cuentaDireccion" placeholder="Dirección completa" oninput="actualizarVistaDireccion()"></div>
       <div class="form-group">
         <label>Vista previa de la dirección</label>
         <div class="address-preview" id="cuentaDireccionPreview">
-          <p class="form-hint">Escribe tu dirección para ver una vista previa en Google Maps.</p>
+          <p class="form-hint">Escribe tu consultorio y dirección para ver una vista previa en Google Maps.</p>
         </div>
         <iframe id="cuentaDireccionMapa" class="map-preview" src="" style="display:none;" loading="lazy"></iframe>
         <a id="cuentaDireccionMapsLink" class="btn-outline btn-block" style="display:none;margin-top:10px;" target="_blank" rel="noopener noreferrer">Abrir en Google Maps</a>
