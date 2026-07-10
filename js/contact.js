@@ -8,5 +8,5 @@ function enviarContactoWhatsApp() {
   const mensaje = document.getElementById('contactoMensaje').value.trim();
   if (!mensaje) { showToast('Escribe un mensaje', 'warning'); return; }
   const texto = encodeURIComponent(`Hola, soy ${nombre || 'un cliente'}.\n\n${mensaje}`);
-  window.open(`https://wa.me/573000000000?text=${texto}`, '_blank');
+  window.open(`https://wa.me/573107992293?text=${texto}`, '_blank');
 }

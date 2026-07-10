@@ -6,7 +6,7 @@
 
 <!-- SECURITY HEADERS (CSP vía meta — complementa con headers HTTP en tu hosting si puedes) -->
 <meta http-equiv="Content-Security-Policy"
-  content="default-src 'self' https:; script-src 'self' https://cdn.jsdelivr.net; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https:; connect-src 'self' https://jhmqvuxarimkndrpdlbf.supabase.co wss://jhmqvuxarimkndrpdlbf.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self';">
+  content="default-src 'self' https:; script-src 'self' https://cdn.jsdelivr.net; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https:; connect-src 'self' https://jhmqvuxarimkndrpdlbf.supabase.co wss://jhmqvuxarimkndrpdlbf.supabase.co https://api.cloudinary.com; frame-src 'none'; object-src 'none'; base-uri 'self';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 
@@ -50,7 +50,7 @@
         <span class="cart-count" id="cartCount">0</span>
       </button>
       <a class="nav-admin-link" id="navCuentaLink" onclick="goToPage('cuenta')">Mi cuenta</a>
-      <a class="nav-admin-link" onclick="goToPage('admin')">Admin</a>
+      <a class="nav-admin-link" id="navAdminLink" onclick="goToPage('admin')" style="display:none;">Admin</a>
       <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menú">
         <span></span><span></span><span></span>
       </button>
@@ -62,7 +62,7 @@
   <a onclick="goToPage('tienda');renderCatalog()">Tienda</a>
   <a onclick="goToPage('contacto')">Contacto</a>
   <a onclick="goToPage('cuenta')">Mi cuenta</a>
-  <a onclick="goToPage('admin')">Admin</a>
+  <a id="navAdminLinkMobile" onclick="goToPage('admin')" style="display:none;">Admin</a>
 </div>
 
 <!-- ============ PAGE: INICIO ============ -->
@@ -76,7 +76,7 @@
         <p class="hero-desc">Restauración, ortodoncia, bioseguridad e instrumental de marcas certificadas. Pides por WhatsApp y despachamos en 24–48h.</p>
         <div class="hero-actions">
           <button class="btn-primary" onclick="goToPage('tienda');renderCatalog()"><i class="ti ti-shopping-bag"></i> Ver catálogo</button>
-          <a class="btn-outline" href="https://wa.me/573000000000" target="_blank" rel="noopener"><i class="ti ti-brand-whatsapp"></i> Escribir por WhatsApp</a>
+          <a class="btn-outline" href="https://wa.me/573107992293" target="_blank" rel="noopener"><i class="ti ti-brand-whatsapp"></i> Escribir por WhatsApp</a>
         </div>
         <div class="hero-meta">
           <div class="hmeta-item"><span class="n">+300</span><span class="l">referencias</span></div>
@@ -170,7 +170,7 @@
       <p>© 2026 DentiBox. Todos los derechos reservados.</p>
       <div class="footer-links">
         <a onclick="goToPage('contacto')">Contacto</a>
-        <a href="https://wa.me/573000000000" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://wa.me/573107992293" target="_blank" rel="noopener">WhatsApp</a>
       </div>
     </div>
   </footer>
@@ -283,20 +283,10 @@
 <div class="page" id="page-admin">
   <div class="admin-shell">
 
-    <div class="admin-login-box" id="adminLoginBox">
+    <div class="admin-login-box" id="adminDeniedBox">
       <h2>Acceso administrador</h2>
-      <p>Inicia sesión para gestionar pedidos, clientes y productos.</p>
-      <div class="form-group">
-        <label>Correo</label>
-        <input type="email" id="adminEmail" placeholder="tucorreo@dominio.com">
-      </div>
-      <div class="form-group">
-        <label>Contraseña</label>
-        <input type="password" id="adminPassword" placeholder="••••••••">
-      </div>
-      <button class="btn-primary btn-block" onclick="adminLogin()">Ingresar</button>
-      <p class="form-hint" id="adminLoginMsg" style="margin-top:10px;"></p>
-      <p class="form-hint" style="margin-top:14px;">Modo demo: cualquier correo/contraseña te da acceso mientras conectamos Supabase.</p>
+      <p id="adminDeniedMsg">Esta sección es solo para la cuenta autorizada. Inicia sesión desde "Mi cuenta" con ese correo.</p>
+      <button class="btn-primary btn-block" onclick="goToPage('cuenta')">Ir a Mi cuenta</button>
     </div>
 
     <div id="adminPanelWrap" style="display:none;">
@@ -305,12 +295,7 @@
           <h1>Panel de administración</h1>
           <p class="form-hint" id="adminUserEmail"></p>
         </div>
-        <button class="btn-outline" onclick="adminLogout()"><i class="ti ti-logout"></i> Cerrar sesión</button>
-      </div>
-
-      <div class="demo-banner">
-        <i class="ti ti-info-circle"></i>
-        <span>Estás viendo datos de prueba en memoria (se reinician al recargar la página). Todo lo que hagas aquí se reemplaza por datos reales al conectar Supabase.</span>
+        <button class="btn-outline" onclick="clienteCerrarSesion()"><i class="ti ti-logout"></i> Cerrar sesión</button>
       </div>
 
       <div class="admin-tabs">
@@ -333,24 +318,17 @@
 
       <!-- ===== TAB: CLIENTES (CRM) ===== -->
       <div class="admin-panel" id="adminTab-clientes">
-        <div class="admin-form-card" id="clienteFormCard">
-          <h3 id="clienteFormTitle">Agregar cliente</h3>
+        <div class="admin-form-card" id="clienteFormCard" style="display:none;">
+          <h3>Editar cliente</h3>
+          <p class="form-hint" style="margin:-6px 0 var(--space-4);">Los clientes se registran ellos mismos desde "Mi cuenta". Aquí solo puedes corregir sus datos.</p>
           <div class="form-row">
             <div class="form-group"><label>Nombre</label><input type="text" id="clNombre" placeholder="Dra. Nombre Apellido"></div>
             <div class="form-group"><label>Teléfono</label><input type="text" id="clTelefono" placeholder="300 123 4567"></div>
           </div>
-          <div class="form-row">
-            <div class="form-group"><label>Email</label><input type="email" id="clEmail" placeholder="correo@consultorio.com"></div>
-            <div class="form-group"><label>Dirección</label><input type="text" id="clDireccion" placeholder="Consultorio, dirección completa"></div>
-          </div>
-          <div class="form-group">
-            <label>Foto de fachada del consultorio (link temporal)</label>
-            <input type="url" id="clFoto" placeholder="https://...">
-            <p class="form-hint">Por ahora es un link; con Supabase Storage esto será una subida de archivo real.</p>
-          </div>
+          <div class="form-group"><label>Dirección</label><input type="text" id="clDireccion" placeholder="Consultorio, dirección completa"></div>
           <div style="display:flex;gap:10px;margin-top:8px;">
-            <button class="btn-primary" onclick="saveCliente()" id="clienteFormSubmitBtn">Guardar cliente</button>
-            <button class="btn-outline" onclick="resetClienteForm()">Cancelar edición</button>
+            <button class="btn-primary" onclick="saveCliente()">Guardar cambios</button>
+            <button class="btn-outline" onclick="resetClienteForm()">Cancelar</button>
           </div>
         </div>
 
@@ -385,22 +363,23 @@
           </div>
           <div class="form-row">
             <div class="form-group"><label>Precio</label><input type="number" id="pPrecio" placeholder="0"></div>
-            <div class="form-group"><label>Precio anterior (opcional, para ofertas)</label><input type="number" id="pPrecioAnterior" placeholder="0"></div>
-          </div>
-          <div class="form-row">
             <div class="form-group"><label>Stock disponible</label><input type="number" id="pStock" placeholder="0"></div>
-            <div class="form-group">
-              <label>Link de la imagen</label>
-              <input type="url" id="pImagen" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label>Foto del producto</label>
+            <div class="dropzone" id="pImagenDropzone">
+              <input type="file" id="pImagenFile" accept="image/*" style="display:none;">
+              <div class="dropzone-empty" id="pImagenDropzoneEmpty">
+                <i class="ti ti-photo-plus"></i>
+                <p>Arrastra una foto aquí o haz clic para elegirla</p>
+              </div>
+              <img id="pImagenPreview" style="display:none;">
             </div>
+            <input type="hidden" id="pImagen">
+            <p class="form-hint" id="pImagenStatus"></p>
           </div>
-          <p class="form-hint" style="margin:-8px 0 12px;">Sube la imagen a Cloudinary, Imgur o similar y pega aquí el link. Este proyecto no almacena archivos de producto, solo la URL.</p>
           <div class="form-group"><label>Descripción</label><textarea id="pDescripcion" rows="3"></textarea></div>
-          <div class="form-row">
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.83rem;"><input type="checkbox" id="pOferta" style="width:auto;"> Marcar como oferta</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.83rem;"><input type="checkbox" id="pNuevo" style="width:auto;"> Marcar como nuevo</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.83rem;"><input type="checkbox" id="pOculto" style="width:auto;"> Ocultar de la tienda</label>
-          </div>
+          <label style="display:flex;align-items:center;gap:6px;font-size:0.83rem;margin-bottom:var(--space-4);"><input type="checkbox" id="pActivo" style="width:auto;" checked> Visible en la tienda</label>
           <div style="display:flex;gap:10px;margin-top:8px;">
             <button class="btn-primary" onclick="saveProduct()" id="productFormSubmitBtn">Guardar producto</button>
             <button class="btn-outline" onclick="resetProductForm()">Cancelar edición</button>
@@ -513,7 +492,7 @@
   </div>
 </div>
 
-<a class="wa-float" href="https://wa.me/573000000000" target="_blank" rel="noopener" aria-label="WhatsApp">
+<a class="wa-float" href="https://wa.me/573107992293" target="_blank" rel="noopener" aria-label="WhatsApp">
   <i class="ti ti-brand-whatsapp"></i>
 </a>
 
@@ -522,10 +501,10 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js"></script>
 <script src="js/ui.js"></script>
-<script src="js/mock-data.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/cart.js"></script>
 <script src="js/catalog.js"></script>
+<script src="js/cloudinary-upload.js"></script>
 <script src="js/admin.js"></script>
 <script src="js/contact.js"></script>
 <script src="js/main.js"></script>

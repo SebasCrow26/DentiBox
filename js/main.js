@@ -1,11 +1,9 @@
 /* =====================================================================
    MAIN.JS — punto de entrada. Se ejecuta cuando el DOM y Supabase
    (evento 'supabase-ready' disparado por supabase-config.js) están listos.
-   El panel admin corre en modo demo (js/mock-data.js) y todavía no
-   depende de Supabase, así que se inicializa de inmediato.
+   El panel admin se gatea desde auth.js (renderAdminGate, llamado en
+   cada cambio de sesión) — no necesita inicialización aparte aquí.
 ===================================================================== */
-
-if (document.getElementById('adminLoginBox')) initAdminAuth();
 
 function initApp() {
   loadCart();

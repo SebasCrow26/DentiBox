@@ -14,7 +14,14 @@
    (window._sb) ya cargados antes que este archivo.
 ===================================================================== */
 
+/** Único correo con acceso al panel de administrador. */
+const ADMIN_EMAIL = 'sebastian.ramos26122005@gmail.com';
+
 let _clienteState = { user: null, cliente: null };
+
+function esAdmin() {
+  return !!(_clienteState.user && _clienteState.user.email === ADMIN_EMAIL);
+}
 
 async function initClienteAuth() {
   const { data: { session } } = await window._sb.auth.getSession();
@@ -39,8 +46,14 @@ async function onSesionCambio(session) {
     _clienteState.cliente = data || null;
   }
 
+  const adminLink = document.getElementById('navAdminLink');
+  if (adminLink) adminLink.style.display = esAdmin() ? '' : 'none';
+  const adminLinkMobile = document.getElementById('navAdminLinkMobile');
+  if (adminLinkMobile) adminLinkMobile.style.display = esAdmin() ? '' : 'none';
+
   renderCuentaPage();
   updateCartUI();
+  window.renderAdminGate && window.renderAdminGate();
 }
 
 function clienteListo() {
@@ -174,3 +187,5 @@ window.clienteLoginGoogle = clienteLoginGoogle;
 window.clienteCerrarSesion = clienteCerrarSesion;
 window.guardarPerfilCliente = guardarPerfilCliente;
 window.renderCuentaPage = renderCuentaPage;
+window.esAdmin = esAdmin;
+window.ADMIN_EMAIL = ADMIN_EMAIL;
