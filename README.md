@@ -24,7 +24,8 @@ DentiBox/
 ## 1. Configurar Supabase
 
 1. Copia `.env.local.example` a `.env.local` y llena `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` (Project Settings → API).
-2. En el SQL Editor de Supabase, corre en orden todo lo que hay en `sql/`:
+2. En el SQL Editor de Supabase, corre en este orden todo lo que hay en `sql/` (si es un proyecto nuevo, hace falta el primero; si ya tenías las tablas de antes, empieza en el segundo):
+   - `00_schema_base.sql` — las 7 tablas (clientes, productos, pedidos, pedido_items, facturas, promociones, solicitudes_producto) + RLS base. **Solo en un proyecto nuevo/vacío.**
    - `crear_pedido.sql` — checkout de un cliente con cuenta.
    - `crear_pedido_invitado.sql` — checkout sin cuenta (invitado).
    - `profiles_and_admin.sql` — tabla `profiles` + gate de admin (reemplaza el correo fijo de antes por una columna `is_admin`; al final del archivo se promueve automáticamente a `sebastian.ramos26122005@gmail.com`).
@@ -49,6 +50,13 @@ Abre `http://localhost:3000`.
 ## 4. Desplegar en Cloudflare Pages
 
 El dominio ya configurado es `dentibox.pages.dev`.
+
+**Variables de entorno**: `.env.local` solo aplica en tu máquina — Cloudflare
+Pages necesita las suyas propias. En el dashboard de Cloudflare Pages → tu
+proyecto → Settings → Environment variables, agrega las mismas 6 variables
+de `.env.local.example` (con los valores reales), tanto en Production como
+en Preview. Sin esto, el sitio desplegado no podrá hablar con Supabase ni
+Cloudinary aunque local sí funcione.
 
 ```bash
 npm run pages:build      # compila con @cloudflare/next-on-pages
