@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: #f7fafd;
+    color: #12224d;
+  }
+  :focus-visible {
+    outline: 2px solid #1e86e8;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer utilities {
+  .placeholder-bg {
+    background-image: repeating-linear-gradient(135deg, #eef5fc, #eef5fc 10px, #e1eefa 10px, #e1eefa 20px);
+  }
+}
