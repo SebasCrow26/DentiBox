@@ -1,10 +1,15 @@
 /* =====================================================================
    CART.JS — carrito persistido en localStorage + checkout real contra
-   Supabase (crea filas en `pedidos`/`pedido_items` vía la función RPC
-   `crear_pedido`, ver sql/crear_pedido.sql).
+   Supabase (crea filas en `pedidos`/`pedido_items` vía RPC — `crear_pedido`
+   si hay sesión con perfil completo, `crear_pedido_invitado` si no, ver
+   sql/crear_pedido.sql y sql/crear_pedido_invitado.sql) y de paso abre
+   WhatsApp con el resumen para avisar de inmediato.
    Depende de ui.js, de auth.js (window.clienteListo/getClienteActual)
    y de window._getProductById (definido en catalog.js).
 ===================================================================== */
+
+// ⚠️ Número de WhatsApp del negocio (formato internacional, sin +).
+const WHATSAPP_NUMBER = '573107992293';
 
 let cart = [];
 let _checkoutEnCurso = false;
@@ -104,18 +109,20 @@ function toggleCart(forceOpen) {
   if (open) updateCartUI();
 }
 
-/** Crea el pedido real en Supabase (pedidos + pedido_items) vía RPC. */
-async function confirmarPedido() {
-  if (_checkoutEnCurso) return;
+/** Punto de entrada del botón "Confirmar pedido". */
+function confirmarPedido() {
   if (!cart.length) { showToast('Tu carrito está vacío', 'warning'); return; }
 
-  if (!window.clienteListo || !clienteListo()) {
-    showToast('Inicia sesión y completa tu perfil para poder comprar', 'warning');
-    toggleCart(false);
-    goToPage('cuenta');
-    return;
+  if (window.clienteListo && clienteListo()) {
+    crearPedidoConCuenta();
+  } else {
+    abrirCheckoutInvitado();
   }
+}
 
+/** Cliente con sesión y perfil completo: usa su ficha de `clientes` ya existente. */
+async function crearPedidoConCuenta() {
+  if (_checkoutEnCurso) return;
   _checkoutEnCurso = true;
   showToast('Enviando pedido...', '');
   try {
@@ -126,18 +133,79 @@ async function confirmarPedido() {
       p_items
     });
     if (error) throw error;
-
-    cart = [];
-    saveCart();
-    updateCartUI();
-    toggleCart(false);
-    showToast(`Pedido #${pedido.numero_pedido} confirmado`, 'success');
+    finalizarPedidoExitoso(pedido);
   } catch (e) {
     console.error(e);
     showToast(e.message || 'No se pudo crear el pedido. Intenta de nuevo.', 'error');
   } finally {
     _checkoutEnCurso = false;
   }
+}
+
+/* ============================================================
+   CHECKOUT DE INVITADO (sin cuenta) — nombre + dirección y listo.
+============================================================ */
+function abrirCheckoutInvitado() {
+  toggleCart(false);
+  document.getElementById('guestCheckoutMsg').textContent = '';
+  document.getElementById('guestCheckoutOverlay').classList.add('open');
+}
+
+function cerrarCheckoutInvitado() {
+  document.getElementById('guestCheckoutOverlay').classList.remove('open');
+}
+
+async function enviarPedidoInvitado() {
+  if (_checkoutEnCurso) return;
+  const nombre = document.getElementById('guestNombre').value.trim();
+  const telefono = document.getElementById('guestTelefono').value.trim();
+  const direccion = document.getElementById('guestDireccion').value.trim();
+  const msgEl = document.getElementById('guestCheckoutMsg');
+
+  if (!nombre || !direccion) {
+    msgEl.textContent = 'Completa al menos tu nombre y dirección.';
+    return;
+  }
+
+  _checkoutEnCurso = true;
+  msgEl.textContent = 'Enviando pedido...';
+  try {
+    const p_items = cart.map(item => ({ producto_id: item.id, cantidad: item.qty }));
+    const { data: pedido, error } = await window._sb.rpc('crear_pedido_invitado', {
+      p_nombre: nombre,
+      p_telefono: telefono || null,
+      p_direccion: direccion,
+      p_items
+    });
+    if (error) throw error;
+    cerrarCheckoutInvitado();
+    finalizarPedidoExitoso(pedido);
+  } catch (e) {
+    console.error(e);
+    msgEl.textContent = e.message || 'No se pudo crear el pedido. Intenta de nuevo.';
+  } finally {
+    _checkoutEnCurso = false;
+  }
+}
+
+/** Común a ambos flujos: arma el mensaje de WhatsApp con el carrito (antes de vaciarlo), avisa y limpia. */
+function finalizarPedidoExitoso(pedido) {
+  let lines = [`Hola, acabo de hacer el pedido #${pedido.numero_pedido} en DentiBox:`, ''];
+  cart.forEach(item => {
+    const p = window._getProductById(item.id);
+    if (!p) return;
+    lines.push(`• ${p.nombre} x${item.qty} — ${formatCOP(p.precio * item.qty)}`);
+  });
+  lines.push('', `Total: ${formatCOP(cartTotal())}`);
+  const text = encodeURIComponent(lines.join('\n'));
+
+  cart = [];
+  saveCart();
+  updateCartUI();
+  toggleCart(false);
+  showToast(`Pedido #${pedido.numero_pedido} confirmado`, 'success');
+
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank');
 }
 
 window.cart = cart;
@@ -149,3 +217,6 @@ window.clearCart = clearCart;
 window.updateCartUI = updateCartUI;
 window.toggleCart = toggleCart;
 window.confirmarPedido = confirmarPedido;
+window.abrirCheckoutInvitado = abrirCheckoutInvitado;
+window.cerrarCheckoutInvitado = cerrarCheckoutInvitado;
+window.enviarPedidoInvitado = enviarPedidoInvitado;

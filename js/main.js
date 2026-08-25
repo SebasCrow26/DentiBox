@@ -31,5 +31,6 @@ document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
   window.closeDetail && closeDetail();
   document.getElementById('facturaOverlay')?.classList.remove('open');
+  document.getElementById('guestCheckoutOverlay')?.classList.remove('open');
   window.toggleCart && window.toggleCart(false);
 });

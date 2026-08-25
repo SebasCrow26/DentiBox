@@ -61,115 +61,34 @@
   <a id="navAdminLinkMobile" href="/admin" onclick="navClick(event,'admin')" style="display:none;">Admin</a>
 </div>
 
-<!-- ============ PAGE: INICIO ============ -->
+<!-- ============ PAGE: INICIO (fusionada con el catálogo) ============ -->
 <div class="page active" id="page-inicio">
 
-  <section class="hero animate-on-scroll">
-    <div class="hero-glow"></div>
-    <div class="hero-inner">
-      <div class="hero-text">
-        <h1 class="hero-title">Insumos dentales,<br><em>sin complicaciones.</em></h1>
-        <p class="hero-desc">El depósito dental digital de tu consultorio: pide contra entrega, elige entre nuestro catálogo completo de insumos y recibe donde estés, sin adelantos ni vueltas.</p>
-        <div class="hero-actions">
-          <button class="btn-primary" onclick="goToPage('tienda')"><i class="ti ti-shopping-bag"></i> Explorar catálogo</button>
-          <a class="btn-outline" href="#como-funciona" onclick="goToPage('inicio',{updateUrl:false})">Cómo funciona</a>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="hero-blob hero-blob-1"></div>
-        <div class="hero-blob hero-blob-2"></div>
-        <div class="hero-card">
-          <div class="hero-card-top">
-            <span>Tienda DentiBox</span>
-            <span class="hero-card-dot"></span>
-          </div>
-          <div class="hero-card-preview">
-            <img src="https://res.cloudinary.com/b8s550ww/image/upload/v1783709339/Denti_gibp3y.png" alt="Vista previa tienda DentiBox">
-          </div>
-          <div class="hero-card-line" style="width:80%;"></div>
-          <div class="hero-card-line" style="width:55%;"></div>
-        </div>
-      </div>
+  <section class="top-banner">
+    <div class="top-banner-inner">
+      <img src="https://res.cloudinary.com/b8s550ww/image/upload/v1783709339/Denti_gibp3y.png" alt="DentiBox — insumos odontológicos, pide contra entrega">
     </div>
   </section>
 
-  <section class="features animate-on-scroll">
-    <div class="features-inner">
-      <div class="features-grid">
-        <div class="feat-card">
-          <div class="feat-icon">🚚</div>
-          <h3>Pedido contra entrega</h3>
-          <p>Pide tus insumos y paga cuando los recibes, sin adelantos ni complicaciones.</p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon">📦</div>
-          <h3>Catálogo completo</h3>
-          <p>Instrumental, materiales de restauración, bioseguridad y equipos en un solo lugar.</p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon">📦</div>
-          <h3>Stock siempre disponible</h3>
-          <p>Inventario real y en vivo, para que tus pedidos nunca queden sin stock.</p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon">⚡</div>
-          <h3>Entrega rápida</h3>
-          <p>Recibe tus pedidos directo en el consultorio, sin perder tiempo de consulta.</p>
-        </div>
+  <div class="catalog-wrap">
+    <div class="catalog-toolbar">
+      <div class="search-wrap">
+        <i class="ti ti-search"></i>
+        <input type="text" placeholder="Buscar producto..." oninput="handleSearch(this.value)">
+      </div>
+      <div class="filter-btns">
+        <button class="filter-btn active" data-cat="todos" onclick="setActiveCategory('todos',this)">Todos</button>
+        <button class="filter-btn" data-cat="restauracion" onclick="setActiveCategory('restauracion',this)">Restauración</button>
+        <button class="filter-btn" data-cat="ortodoncia" onclick="setActiveCategory('ortodoncia',this)">Ortodoncia</button>
+        <button class="filter-btn" data-cat="bioseguridad" onclick="setActiveCategory('bioseguridad',this)">Bioseguridad</button>
+        <button class="filter-btn" data-cat="instrumental" onclick="setActiveCategory('instrumental',this)">Instrumental</button>
+        <button class="filter-btn" data-cat="endodoncia" onclick="setActiveCategory('endodoncia',this)">Endodoncia</button>
+        <button class="filter-btn" data-cat="consumibles" onclick="setActiveCategory('consumibles',this)">Consumibles</button>
       </div>
     </div>
-  </section>
-
-  <section class="steps animate-on-scroll" id="como-funciona">
-    <div class="steps-inner">
-      <div class="section-header text-center">
-        <span class="eyebrow">Cómo funciona</span>
-        <h2>Pedir nunca fue tan simple</h2>
-      </div>
-      <div class="steps-grid">
-        <div class="step"><div class="step-num">1</div><h4>Explora el catálogo</h4><p>Encuentra tus insumos por categoría en segundos.</p></div>
-        <div class="step"><div class="step-num">2</div><h4>Haz tu pedido</h4><p>Arma tu carrito y confírmalo en el momento.</p></div>
-        <div class="step"><div class="step-num">3</div><h4>Recibe en tu consultorio</h4><p>Te lo llevamos directo a tu puerta.</p></div>
-        <div class="step"><div class="step-num">4</div><h4>Paga contra entrega</h4><p>Sin adelantos: pagas cuando lo recibes.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="testimonial-section animate-on-scroll">
-    <div class="section-header text-center">
-      <span class="eyebrow">Testimonios</span>
-      <h2>Opiniones de clientes verificados</h2>
-      <p>Solo las cuentas verificadas pueden dejar su reseña con estrellas.</p>
-    </div>
-    <div class="testimonial-inner">
-      <div class="testimonial-grid" id="testimoniosGrid"></div>
-      <div class="testimonial-form-card" id="testimonioFormCard">
-        <div class="testimonial-note" id="testimonioFormNote">Inicia sesión para enviar tu opinión.</div>
-        <div class="star-rating" id="testimonioStarButtons">
-          <button type="button" onclick="setReviewStars(1)" aria-label="1 estrella">★</button>
-          <button type="button" onclick="setReviewStars(2)" aria-label="2 estrellas">★</button>
-          <button type="button" onclick="setReviewStars(3)" aria-label="3 estrellas">★</button>
-          <button type="button" onclick="setReviewStars(4)" aria-label="4 estrellas">★</button>
-          <button type="button" onclick="setReviewStars(5)" aria-label="5 estrellas">★</button>
-        </div>
-        <textarea id="testimonioComentario" rows="4" placeholder="Escribe tu opinión aquí"></textarea>
-        <p class="form-hint" id="testimonioMsg"></p>
-        <button class="btn-primary btn-block" id="testimonioSubmitBtn" onclick="submitTestimonio()">Enviar testimonio</button>
-      </div>
-    </div>
-  </section>
-
-  <section class="cta-strip animate-on-scroll">
-    <div class="cta-banner">
-      <div class="cta-blob cta-blob-1"></div>
-      <div class="cta-blob cta-blob-2"></div>
-      <div class="cta-banner-content">
-        <h2>Empieza a pedir hoy mismo</h2>
-        <p>Sin adelantos, sin vueltas. Solo insumos dentales, entregados a tu puerta.</p>
-        <button class="btn-cta-white" onclick="goToPage('cuenta')">Crear cuenta gratis</button>
-      </div>
-    </div>
-  </section>
+    <p class="result-label" id="resultLabel">Cargando...</p>
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
 
   <footer>
     <div class="footer-inner">
@@ -476,6 +395,25 @@
         <div id="analiticaWrap"></div>
       </div>
 
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: CHECKOUT DE INVITADO (sin cuenta) ============ -->
+<div class="factura-overlay" id="guestCheckoutOverlay" onclick="if(event.target===this)cerrarCheckoutInvitado()">
+  <div class="factura-modal" style="max-width:400px;">
+    <div class="admin-form-card" style="border:none;box-shadow:none;margin:0;">
+      <h3>Un último dato para tu pedido</h3>
+      <p class="form-hint" style="margin:-6px 0 var(--space-4);">Solo tu nombre y dirección — sin crear cuenta.</p>
+      <div class="form-group"><label>Nombre completo</label><input type="text" id="guestNombre" placeholder="Dra. Nombre Apellido"></div>
+      <div class="form-group"><label>Teléfono (opcional)</label><input type="text" id="guestTelefono" placeholder="300 123 4567"></div>
+      <div class="form-group"><label>Dirección de entrega</label><input type="text" id="guestDireccion" placeholder="Consultorio, dirección completa"></div>
+      <p class="form-hint" id="guestCheckoutMsg"></p>
+      <button class="btn-primary btn-block" onclick="enviarPedidoInvitado()">Confirmar pedido</button>
+      <div style="text-align:center;margin-top:var(--space-4);padding-top:var(--space-4);border-top:1px solid var(--border);">
+        <p class="form-hint" style="margin-bottom:8px;">¿Vas a pedir seguido? Crea tu cuenta en un clic y no vuelvas a llenar esto.</p>
+        <button class="btn-outline btn-block" onclick="cerrarCheckoutInvitado();clienteLoginGoogle()"><i class="ti ti-brand-google"></i> Crear cuenta con Google</button>
+      </div>
     </div>
   </div>
 </div>
